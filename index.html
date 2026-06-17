@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeu des syllabes 🌟</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #faf8ff; min-height: 100vh; padding-bottom: 2rem; }
+  .game { padding: 1.2rem; max-width: 640px; margin: 0 auto; }
+  h1 { text-align: center; font-size: 22px; font-weight: 600; color: #3C3489; margin: 0.8rem 0 1.2rem; }
+  .section-label { font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.6rem; }
+  .tag { padding: 6px 13px; border-radius: 50px; border: 1.5px solid #ccc; background: #fff; color: #555; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .tag.theme-active { background: #9FE1CB; border-color: #1D9E75; color: #04342C; }
+  .tag.sound-active { background: #FAC775; border-color: #BA7517; color: #412402; }
+  .separator { width: 100%; height: 1px; background: #e8e4f0; margin: 0.7rem 0; }
+  .add-theme-row { display: flex; gap: 8px; align-items: center; margin-bottom: 0.3rem; }
+  .add-theme-row input { flex: 1; padding: 9px 14px; border-radius: 50px; border: 1.5px solid #ccc; background: #fff; color: #333; font-size: 14px; outline: none; font-family: inherit; }
+  .add-theme-row input:focus { border-color: #7F77DD; }
+  .theme-info { font-size: 12px; color: #aaa; margin-bottom: 0.7rem; line-height: 1.5; }
+  .word-card { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.2rem 1rem 1rem; margin-bottom: 0.8rem; }
+  .counter-display { text-align: center; font-size: 13px; color: #aaa; margin-bottom: 0.4rem; }
+  .progress-bar-wrap { background: #ede9fa; border-radius: 20px; height: 7px; overflow: hidden; margin-bottom: 1rem; }
+  .progress-bar { height: 7px; border-radius: 20px; background: #7F77DD; transition: width 0.4s; }
+  .word-display { text-align: center; font-size: 42px; font-weight: 700; color: #2C2C2A; margin: 0.5rem 0; min-height: 56px; letter-spacing: 2px; line-height: 1.2; }
+  .word-display .hs { color: #BA7517; }
+  .speak-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0.6rem auto; padding: 11px 26px; font-size: 16px; border-radius: 50px; background: #FAC775; color: #412402; border: none; cursor: pointer; font-weight: 600; transition: transform 0.1s; -webkit-tap-highlight-color: transparent; }
+  .speak-btn:active { transform: scale(0.95); }
+  .tokens-zone { display: flex; justify-content: center; gap: 12px; min-height: 78px; flex-wrap: wrap; align-items: center; margin: 0.7rem 0; padding: 0.8rem; border-radius: 16px; border: 2px dashed #ccc; background: #faf8ff; }
+  .star-token { width: 56px; height: 56px; cursor: pointer; transition: transform 0.1s; user-select: none; display: flex; align-items: center; justify-content: center; position: relative; -webkit-tap-highlight-color: transparent; }
+  .star-token:active { transform: scale(0.85); }
+  .star-token svg { width: 56px; height: 56px; }
+  .star-token .star-num { position: absolute; font-size: 16px; font-weight: 600; color: #26215C; pointer-events: none; }
+  .action-row { display: flex; justify-content: center; gap: 10px; margin: 0.7rem 0; flex-wrap: wrap; }
+  .add-btn { padding: 12px 22px; font-size: 22px; border-radius: 50px; background: #9FE1CB; color: #04342C; border: none; cursor: pointer; font-weight: 600; -webkit-tap-highlight-color: transparent; }
+  .validate-btn { padding: 12px 24px; font-size: 15px; border-radius: 50px; background: #C0DD97; color: #173404; border: none; cursor: pointer; font-weight: 600; -webkit-tap-highlight-color: transparent; }
+  .next-btn { padding: 12px 24px; font-size: 15px; border-radius: 50px; background: #B5D4F4; color: #042C53; border: none; cursor: pointer; font-weight: 600; -webkit-tap-highlight-color: transparent; }
+  .feedback { text-align: center; font-size: 22px; min-height: 40px; margin: 0.3rem 0; font-weight: 600; }
+  .feedback.correct { color: #3B6D11; }
+  .feedback.wrong { color: #A32D2D; }
+  .hint { text-align: center; font-size: 13px; color: #aaa; margin-top: 0.4rem; letter-spacing: 1px; }
+  .empty-msg { text-align: center; color: #aaa; font-size: 15px; padding: 2rem 1rem; }
+  .gen-btn { padding: 9px 16px; border-radius: 50px; background: #AFA9EC; border: none; color: #26215C; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
+  .loading-badge { font-size: 12px; color: #aaa; padding: 4px 0; display: none; }
+  .error-badge { font-size: 12px; color: #A32D2D; padding: 4px 0; display: none; }
+  @media (max-width: 400px) {
+    .word-display { font-size: 34px; }
+    .star-token { width: 48px; height: 48px; }
+    .star-token svg { width: 48px; height: 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="game">
+  <h1>🌟 Jeu des syllabes</h1>
+
+  <div class="section-label">Thème</div>
+  <div class="filters" id="theme-tags">
+    <span class="tag theme-active" data-type="theme" data-val="animaux" onclick="toggleFilter(this)">🐾 Animaux</span>
+    <span class="tag" data-type="theme" data-val="nourriture" onclick="toggleFilter(this)">🍎 Nourriture</span>
+    <span class="tag" data-type="theme" data-val="nature" onclick="toggleFilter(this)">🌿 Nature</span>
+    <span class="tag" data-type="theme" data-val="transports" onclick="toggleFilter(this)">🚗 Transports</span>
+    <span class="tag" data-type="theme" data-val="maison" onclick="toggleFilter(this)">🏠 Maison</span>
+    <span class="tag" data-type="theme" data-val="corps" onclick="toggleFilter(this)">🖐️ Corps</span>
+    <span class="tag" data-type="theme" data-val="vetements" onclick="toggleFilter(this)">👕 Vêtements</span>
+    <span class="tag" data-type="theme" data-val="ecole" onclick="toggleFilter(this)">✏️ École</span>
+    <span class="tag" data-type="theme" data-val="jouets" onclick="toggleFilter(this)">🧸 Jouets</span>
+    <span class="tag" data-type="theme" data-val="sports" onclick="toggleFilter(this)">⚽ Sports</span>
+    <span class="tag" data-type="theme" data-val="princesse" onclick="toggleFilter(this)">👸 Princesse</span>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="section-label">Sons</div>
+  <div class="filters" style="margin-bottom:0.8rem">
+    <span class="tag" data-type="sound" data-val="S" onclick="toggleFilter(this)">S</span>
+    <span class="tag" data-type="sound" data-val="C" onclick="toggleFilter(this)">C</span>
+    <span class="tag" data-type="sound" data-val="CH" onclick="toggleFilter(this)">CH</span>
+    <span class="tag" data-type="sound" data-val="Z" onclick="toggleFilter(this)">Z</span>
+    <span class="tag" data-type="sound" data-val="G" onclick="toggleFilter(this)">G</span>
+    <span class="tag" data-type="sound" data-val="J" onclick="toggleFilter(this)">J</span>
+  </div>
+
+  <div id="empty-msg" class="empty-msg" style="display:none">Aucun mot trouvé avec ces filtres.</div>
+
+  <div id="game-area" class="word-card">
+    <div class="counter-display" id="counter"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress" style="width:0%"></div></div>
+    <div class="word-display" id="word-display"></div>
+    <button class="speak-btn" onclick="speakCurrent()">🔊 Écouter</button>
+    <div class="tokens-zone" id="tokens-zone"><span style="color:#bbb;font-size:14px">Place tes étoiles ici !</span></div>
+    <div class="action-row">
+      <button class="add-btn" onclick="addToken()">+ Étoile</button>
+      <button class="validate-btn" onclick="validate()">✔ Valider</button>
+      <button class="next-btn" id="next-btn" style="display:none" onclick="nextWord()">Suivant →</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="hint" id="hint">Place une étoile pour chaque syllabe, puis valide !</div>
+  </div>
+</div>
+
+<script>
+const CORRECT_MESSAGES = [
+  "🎉 Trop forte, Olivia !",
+  "🌟 Au top !",
+  "✨ La classe !",
+  "🎊 Woohoo !",
+  "👏 Nickel !",
+  "⭐ Super !",
+  "✅ C'est juste !",
+  "🏆 Correct !",
+  "💪 Tu assures !",
+  "🎉 Félicitations !",
+  "🌈 Trop forte !",
+  "🔥 Au top, Olivia !",
+  "🎯 Dans le mille !",
+  "💫 Woohoo, Olivia !",
+  "🥇 La classe, Olivia !",
+  "⚡ Tu assures, Olivia !",
+  "🌟 Félicitations, Olivia !",
+  "🎶 Nickel, Olivia !",
+];
+const WRONG_MESSAGES = [
+  "😊 Presque ! C'était",
+  "🙈 Pas tout à fait ! C'était",
+  "💪 Encore un effort ! C'était",
+  "🌈 Presque, Olivia ! C'était",
+  "🤔 Raté de peu ! C'était",
+  "😄 On y est presque ! C'était",
+];
+function pickCorrect() { return CORRECT_MESSAGES[Math.floor(Math.random()*CORRECT_MESSAGES.length)]; }
+function pickWrong() { return WRONG_MESSAGES[Math.floor(Math.random()*WRONG_MESSAGES.length)]; }
+
+const ALL_WORDS = [
+  {word:"CHAT",syllables:["CHAT"],emoji:"🐱",theme:"animaux",sounds:["CH"]},
+  {word:"CHIEN",syllables:["CHIEN"],emoji:"🐶",theme:"animaux",sounds:["CH"]},
+  {word:"CHEVAL",syllables:["CHE","VAL"],emoji:"🐴",theme:"animaux",sounds:["CH"]},
+  {word:"COCHON",syllables:["CO","CHON"],emoji:"🐷",theme:"animaux",sounds:["CH","C"]},
+  {word:"CHENILLE",syllables:["CHE","NIL","LE"],emoji:"🐛",theme:"animaux",sounds:["CH"]},
+  {word:"CHAMEAU",syllables:["CHA","MEAU"],emoji:"🐪",theme:"animaux",sounds:["CH"]},
+  {word:"CHOUETTE",syllables:["CHOUE","TTE"],emoji:"🦉",theme:"animaux",sounds:["CH"]},
+  {word:"CHAUVE-SOURIS",syllables:["CHAU","VE","SOU","RIS"],emoji:"🦇",theme:"animaux",sounds:["CH","S"]},
+  {word:"SERPENT",syllables:["SER","PENT"],emoji:"🐍",theme:"animaux",sounds:["S"]},
+  {word:"SINGE",syllables:["SIN","GE"],emoji:"🐒",theme:"animaux",sounds:["S","G","J"]},
+  {word:"SOURIS",syllables:["SOU","RIS"],emoji:"🐭",theme:"animaux",sounds:["S"]},
+  {word:"SALAMANDRE",syllables:["SA","LA","MAN","DRE"],emoji:"🦎",theme:"animaux",sounds:["S"]},
+  {word:"SANGLIER",syllables:["SAN","GLIER"],emoji:"🐗",theme:"animaux",sounds:["S","G"]},
+  {word:"CIGOGNE",syllables:["CI","GOG","NE"],emoji:"🦩",theme:"animaux",sounds:["C","G"]},
+  {word:"CROCODILE",syllables:["CRO","CO","DI","LE"],emoji:"🐊",theme:"animaux",sounds:["C"]},
+  {word:"ZÈBRE",syllables:["ZÈ","BRE"],emoji:"🦓",theme:"animaux",sounds:["Z"]},
+  {word:"GIRAFE",syllables:["GI","RA","FE"],emoji:"🦒",theme:"animaux",sounds:["G","J"]},
+  {word:"GRENOUILLE",syllables:["GRE","NOUIL","LE"],emoji:"🐸",theme:"animaux",sounds:["G"]},
+  {word:"GORILLE",syllables:["GO","RIL","LE"],emoji:"🦍",theme:"animaux",sounds:["G"]},
+  {word:"JAGUAR",syllables:["JA","GUAR"],emoji:"🐆",theme:"animaux",sounds:["J","G"]},
+  {word:"JUMENT",syllables:["JU","MENT"],emoji:"🐴",theme:"animaux",sounds:["J"]},
+  {word:"PAPILLON",syllables:["PA","PIL","LON"],emoji:"🦋",theme:"animaux",sounds:[]},
+  {word:"ÉLÉPHANT",syllables:["É","LÉ","PHANT"],emoji:"🐘",theme:"animaux",sounds:[]},
+  {word:"TORTUE",syllables:["TOR","TUE"],emoji:"🐢",theme:"animaux",sounds:[]},
+  {word:"LAPIN",syllables:["LA","PIN"],emoji:"🐰",theme:"animaux",sounds:[]},
+  {word:"RENARD",syllables:["RE","NARD"],emoji:"🦊",theme:"animaux",sounds:[]},
+  {word:"MOUTON",syllables:["MOU","TON"],emoji:"🐑",theme:"animaux",sounds:[]},
+  {word:"VACHE",syllables:["VA","CHE"],emoji:"🐄",theme:"animaux",sounds:["CH"]},
+  {word:"PINGOUIN",syllables:["PIN","GOUIN"],emoji:"🐧",theme:"animaux",sounds:["G"]},
+  {word:"CERISE",syllables:["CE","RI","SE"],emoji:"🍒",theme:"nourriture",sounds:["C","S"]},
+  {word:"CITRON",syllables:["CI","TRON"],emoji:"🍋",theme:"nourriture",sounds:["C"]},
+  {word:"CHOCOLAT",syllables:["CHO","CO","LAT"],emoji:"🍫",theme:"nourriture",sounds:["CH","C"]},
+  {word:"CHIPS",syllables:["CHIPS"],emoji:"🥔",theme:"nourriture",sounds:["CH","S"]},
+  {word:"SUCETTE",syllables:["SU","CET","TE"],emoji:"🍭",theme:"nourriture",sounds:["S","C"]},
+  {word:"SAUCISSE",syllables:["SAU","CIS","SE"],emoji:"🌭",theme:"nourriture",sounds:["S","C"]},
+  {word:"SALADE",syllables:["SA","LA","DE"],emoji:"🥗",theme:"nourriture",sounds:["S"]},
+  {word:"SOUPE",syllables:["SOUPE"],emoji:"🍲",theme:"nourriture",sounds:["S"]},
+  {word:"SANDWICH",syllables:["SAND","WICH"],emoji:"🥪",theme:"nourriture",sounds:["S","CH"]},
+  {word:"FRAISE",syllables:["FRAÎ","SE"],emoji:"🍓",theme:"nourriture",sounds:["S"]},
+  {word:"GLACE",syllables:["GLA","CE"],emoji:"🍦",theme:"nourriture",sounds:["G","C"]},
+  {word:"GÂTEAU",syllables:["GÂ","TEAU"],emoji:"🎂",theme:"nourriture",sounds:["G"]},
+  {word:"GELÉE",syllables:["GE","LÉE"],emoji:"🍮",theme:"nourriture",sounds:["G","J"]},
+  {word:"GAUFRE",syllables:["GAU","FRE"],emoji:"🧇",theme:"nourriture",sounds:["G"]},
+  {word:"JUS",syllables:["JUS"],emoji:"🧃",theme:"nourriture",sounds:["J"]},
+  {word:"ANANAS",syllables:["A","NA","NAS"],emoji:"🍍",theme:"nourriture",sounds:["S"]},
+  {word:"PIZZA",syllables:["PIT","ZA"],emoji:"🍕",theme:"nourriture",sounds:["Z"]},
+  {word:"CAROTTE",syllables:["CA","ROT","TE"],emoji:"🥕",theme:"nourriture",sounds:["C"]},
+  {word:"CONCOMBRE",syllables:["CON","COM","BRE"],emoji:"🥒",theme:"nourriture",sounds:["C"]},
+  {word:"CHAMPIGNON",syllables:["CHAM","PI","GNON"],emoji:"🍄",theme:"nourriture",sounds:["CH"]},
+  {word:"SPAGHETTI",syllables:["SPA","GUET","TI"],emoji:"🍝",theme:"nourriture",sounds:["S","G"]},
+  {word:"BISCUIT",syllables:["BIS","CUIT"],emoji:"🍪",theme:"nourriture",sounds:["S","C"]},
+  {word:"CRÊPE",syllables:["CRÊPE"],emoji:"🫓",theme:"nourriture",sounds:["C"]},
+  {word:"BRIOCHE",syllables:["BRI","O","CHE"],emoji:"🥐",theme:"nourriture",sounds:["CH"]},
+  {word:"SOLEIL",syllables:["SO","LEIL"],emoji:"☀️",theme:"nature",sounds:["S"]},
+  {word:"SABLE",syllables:["SA","BLE"],emoji:"🏖️",theme:"nature",sounds:["S"]},
+  {word:"SOURCE",syllables:["SOU","RCE"],emoji:"💧",theme:"nature",sounds:["S","C"]},
+  {word:"SAISON",syllables:["SAI","SON"],emoji:"🍂",theme:"nature",sounds:["S","Z"]},
+  {word:"CHAMPIGNON",syllables:["CHAM","PI","GNON"],emoji:"🍄",theme:"nature",sounds:["CH"]},
+  {word:"GAZON",syllables:["GA","ZON"],emoji:"🌿",theme:"nature",sounds:["G","Z"]},
+  {word:"GLAND",syllables:["GLAND"],emoji:"🌰",theme:"nature",sounds:["G"]},
+  {word:"JUNGLE",syllables:["JUN","GLE"],emoji:"🌴",theme:"nature",sounds:["J","G"]},
+  {word:"GIVRE",syllables:["GI","VRE"],emoji:"❄️",theme:"nature",sounds:["G","J"]},
+  {word:"FLEUR",syllables:["FLEUR"],emoji:"🌸",theme:"nature",sounds:[]},
+  {word:"NUAGE",syllables:["NU","A","GE"],emoji:"☁️",theme:"nature",sounds:["G","J"]},
+  {word:"MONTAGNE",syllables:["MON","TA","GNE"],emoji:"⛰️",theme:"nature",sounds:["G"]},
+  {word:"CAILLOU",syllables:["CAI","LLOU"],emoji:"🪨",theme:"nature",sounds:["C"]},
+  {word:"CERISIER",syllables:["CE","RI","SIER"],emoji:"🌸",theme:"nature",sounds:["C","S"]},
+  {word:"RIVIÈRE",syllables:["RI","VIÈRE"],emoji:"🏞️",theme:"nature",sounds:[]},
+  {word:"FORÊT",syllables:["FO","RÊT"],emoji:"🌲",theme:"nature",sounds:[]},
+  {word:"VOLCAN",syllables:["VOL","CAN"],emoji:"🌋",theme:"nature",sounds:["C"]},
+  {word:"GLACIER",syllables:["GLA","CIER"],emoji:"🧊",theme:"nature",sounds:["G","C"]},
+  {word:"GROTTE",syllables:["GROT","TE"],emoji:"🕳️",theme:"nature",sounds:["G"]},
+  {word:"CAMION",syllables:["CA","MION"],emoji:"🚛",theme:"transports",sounds:["C"]},
+  {word:"SCOOTER",syllables:["SCOO","TER"],emoji:"🛵",theme:"transports",sounds:["S","C"]},
+  {word:"CHAUFFEUR",syllables:["CHAUF","FEUR"],emoji:"🧑‍✈️",theme:"transports",sounds:["CH"]},
+  {word:"FUSÉE",syllables:["FU","SÉE"],emoji:"🚀",theme:"transports",sounds:["S"]},
+  {word:"VOITURE",syllables:["VOI","TU","RE"],emoji:"🚗",theme:"transports",sounds:[]},
+  {word:"AVION",syllables:["A","VION"],emoji:"✈️",theme:"transports",sounds:[]},
+  {word:"BATEAU",syllables:["BA","TEAU"],emoji:"⛵",theme:"transports",sounds:[]},
+  {word:"VÉLO",syllables:["VÉ","LO"],emoji:"🚲",theme:"transports",sounds:[]},
+  {word:"TRAIN",syllables:["TRAIN"],emoji:"🚂",theme:"transports",sounds:[]},
+  {word:"TRACTEUR",syllables:["TRAC","TEUR"],emoji:"🚜",theme:"transports",sounds:["C"]},
+  {word:"ZEPPELIN",syllables:["ZEP","PE","LIN"],emoji:"🎈",theme:"transports",sounds:["Z"]},
+  {word:"JEEP",syllables:["JEEP"],emoji:"🚙",theme:"transports",sounds:["J"]},
+  {word:"CAMIONNETTE",syllables:["CA","MION","NET","TE"],emoji:"🚐",theme:"transports",sounds:["C"]},
+  {word:"HÉLICOPTÈRE",syllables:["HÉ","LI","COP","TÈ","RE"],emoji:"🚁",theme:"transports",sounds:["C"]},
+  {word:"SALON",syllables:["SA","LON"],emoji:"🛋️",theme:"maison",sounds:["S"]},
+  {word:"CHAISE",syllables:["CHAISE"],emoji:"🪑",theme:"maison",sounds:["CH","S"]},
+  {word:"CHAMBRE",syllables:["CHAM","BRE"],emoji:"🛏️",theme:"maison",sounds:["CH"]},
+  {word:"CHEMINÉE",syllables:["CHE","MI","NÉE"],emoji:"🔥",theme:"maison",sounds:["CH"]},
+  {word:"SAVON",syllables:["SA","VON"],emoji:"🧼",theme:"maison",sounds:["S"]},
+  {word:"SERVIETTE",syllables:["SER","VIET","TE"],emoji:"🧻",theme:"maison",sounds:["S"]},
+  {word:"CASSEROLE",syllables:["CAS","SE","RO","LE"],emoji:"🍳",theme:"maison",sounds:["C","S"]},
+  {word:"CUISINE",syllables:["CUI","SI","NE"],emoji:"🍳",theme:"maison",sounds:["S"]},
+  {word:"JARDIN",syllables:["JAR","DIN"],emoji:"🌻",theme:"maison",sounds:["J"]},
+  {word:"GARAGE",syllables:["GA","RA","GE"],emoji:"🏠",theme:"maison",sounds:["G","J"]},
+  {word:"BALAI",syllables:["BA","LAI"],emoji:"🧹",theme:"maison",sounds:[]},
+  {word:"FENÊTRE",syllables:["FE","NÊ","TRE"],emoji:"🪟",theme:"maison",sounds:[]},
+  {word:"COUSSIN",syllables:["COUS","SIN"],emoji:"🛋️",theme:"maison",sounds:["C","S"]},
+  {word:"ESCALIER",syllables:["ES","CA","LIER"],emoji:"🪜",theme:"maison",sounds:["S","C"]},
+  {word:"CONGÉLATEUR",syllables:["CON","GÉ","LA","TEUR"],emoji:"❄️",theme:"maison",sounds:["C","G","J"]},
+  {word:"GENOU",syllables:["GE","NOU"],emoji:"🦵",theme:"corps",sounds:["G","J"]},
+  {word:"JOUE",syllables:["JOUE"],emoji:"😊",theme:"corps",sounds:["J"]},
+  {word:"JAMBE",syllables:["JAM","BE"],emoji:"🦵",theme:"corps",sounds:["J"]},
+  {word:"GORGE",syllables:["GOR","GE"],emoji:"🗣️",theme:"corps",sounds:["G","J"]},
+  {word:"SOURCIL",syllables:["SOU","RCIL"],emoji:"😶",theme:"corps",sounds:["S","C"]},
+  {word:"CHEVILLE",syllables:["CHE","VIL","LE"],emoji:"🦶",theme:"corps",sounds:["CH"]},
+  {word:"SQUELETTE",syllables:["SQUE","LET","TE"],emoji:"💀",theme:"corps",sounds:["S"]},
+  {word:"CERVEAU",syllables:["CER","VEAU"],emoji:"🧠",theme:"corps",sounds:["C","S"]},
+  {word:"COUDE",syllables:["COU","DE"],emoji:"💪",theme:"corps",sounds:["C"]},
+  {word:"OREILLE",syllables:["O","REIL","LE"],emoji:"👂",theme:"corps",sounds:[]},
+  {word:"ÉPAULE",syllables:["É","PAU","LE"],emoji:"🧍",theme:"corps",sounds:[]},
+  {word:"VENTRE",syllables:["VEN","TRE"],emoji:"🫃",theme:"corps",sounds:[]},
+  {word:"GENCIVE",syllables:["GEN","CI","VE"],emoji:"😁",theme:"corps",sounds:["G","J","S","C"]},
+  {word:"CHAUSSURE",syllables:["CHAUS","SU","RE"],emoji:"👟",theme:"vetements",sounds:["CH","S"]},
+  {word:"CHAUSSETTE",syllables:["CHAUS","SET","TE"],emoji:"🧦",theme:"vetements",sounds:["CH","S"]},
+  {word:"CHAPEAU",syllables:["CHA","PEAU"],emoji:"👒",theme:"vetements",sounds:["CH"]},
+  {word:"CHEMISE",syllables:["CHE","MI","SE"],emoji:"👔",theme:"vetements",sounds:["CH","S"]},
+  {word:"JUPE",syllables:["JUPE"],emoji:"👗",theme:"vetements",sounds:["J"]},
+  {word:"GILET",syllables:["GI","LET"],emoji:"🦺",theme:"vetements",sounds:["G","J"]},
+  {word:"JEAN",syllables:["JEAN"],emoji:"👖",theme:"vetements",sounds:["J"]},
+  {word:"GANT",syllables:["GANT"],emoji:"🧤",theme:"vetements",sounds:["G"]},
+  {word:"SANDALE",syllables:["SAN","DA","LE"],emoji:"👡",theme:"vetements",sounds:["S"]},
+  {word:"SALOPETTE",syllables:["SA","LO","PET","TE"],emoji:"👕",theme:"vetements",sounds:["S"]},
+  {word:"CASQUETTE",syllables:["CAS","QUET","TE"],emoji:"🧢",theme:"vetements",sounds:["C","S"]},
+  {word:"CEINTURE",syllables:["CEIN","TU","RE"],emoji:"👔",theme:"vetements",sounds:["S","C"]},
+  {word:"SURVÊTEMENT",syllables:["SUR","VÊ","TE","MENT"],emoji:"🏃",theme:"vetements",sounds:["S"]},
+  {word:"ÉCHARPE",syllables:["É","CHAR","PE"],emoji:"🧣",theme:"vetements",sounds:["CH"]},
+  {word:"PYJAMA",syllables:["PY","JA","MA"],emoji:"🛌",theme:"vetements",sounds:["J"]},
+  {word:"CAHIER",syllables:["CA","HIER"],emoji:"📓",theme:"ecole",sounds:["C"]},
+  {word:"CRAYON",syllables:["CRA","YON"],emoji:"✏️",theme:"ecole",sounds:["C"]},
+  {word:"CISEAU",syllables:["CI","SEAU"],emoji:"✂️",theme:"ecole",sounds:["C","S","Z"]},
+  {word:"CARTABLE",syllables:["CAR","TA","BLE"],emoji:"🎒",theme:"ecole",sounds:["C"]},
+  {word:"CALCULETTE",syllables:["CAL","CU","LET","TE"],emoji:"🔢",theme:"ecole",sounds:["C"]},
+  {word:"STYLO",syllables:["STY","LO"],emoji:"🖊️",theme:"ecole",sounds:["S"]},
+  {word:"SURLIGNEUR",syllables:["SUR","LI","GNEUR"],emoji:"🖌️",theme:"ecole",sounds:["S","G"]},
+  {word:"CHIFFRE",syllables:["CHIF","FRE"],emoji:"🔢",theme:"ecole",sounds:["CH"]},
+  {word:"CHANSON",syllables:["CHAN","SON"],emoji:"🎵",theme:"ecole",sounds:["CH","S"]},
+  {word:"COLLE",syllables:["COL","LE"],emoji:"🗃️",theme:"ecole",sounds:["C"]},
+  {word:"GOMME",syllables:["GOM","ME"],emoji:"🩹",theme:"ecole",sounds:["G"]},
+  {word:"GÉOGRAPHIE",syllables:["GÉ","O","GRA","PHIE"],emoji:"🗺️",theme:"ecole",sounds:["G","J"]},
+  {word:"GYMNASE",syllables:["GYM","NA","SE"],emoji:"🏋️",theme:"ecole",sounds:["G","J","S"]},
+  {word:"LIVRE",syllables:["LI","VRE"],emoji:"📚",theme:"ecole",sounds:[]},
+  {word:"RÈGLE",syllables:["RÈ","GLE"],emoji:"📏",theme:"ecole",sounds:["G"]},
+  {word:"SCIENCES",syllables:["SCIEN","CES"],emoji:"🔬",theme:"ecole",sounds:["S","C"]},
+  {word:"JOUET",syllables:["JOU","ET"],emoji:"🧸",theme:"jouets",sounds:["J"]},
+  {word:"JEUX",syllables:["JEUX"],emoji:"🎲",theme:"jouets",sounds:["J"]},
+  {word:"BALLON",syllables:["BAL","LON"],emoji:"🎈",theme:"jouets",sounds:[]},
+  {word:"POUPÉE",syllables:["POU","PÉE"],emoji:"🪆",theme:"jouets",sounds:[]},
+  {word:"CASSE-TÊTE",syllables:["CAS","SE","TÊ","TE"],emoji:"🧩",theme:"jouets",sounds:["C","S"]},
+  {word:"CHÂTEAU",syllables:["CHÂ","TEAU"],emoji:"🏰",theme:"jouets",sounds:["CH"]},
+  {word:"SABLIER",syllables:["SA","BLIER"],emoji:"⏳",theme:"jouets",sounds:["S"]},
+  {word:"CERF-VOLANT",syllables:["CERF","VO","LANT"],emoji:"🪁",theme:"jouets",sounds:["C","S"]},
+  {word:"GUITARE",syllables:["GUI","TA","RE"],emoji:"🎸",theme:"jouets",sounds:["G"]},
+  {word:"SIFFLET",syllables:["SIF","FLET"],emoji:"🎶",theme:"jouets",sounds:["S"]},
+  {word:"COSTUME",syllables:["COS","TU","ME"],emoji:"🎭",theme:"jouets",sounds:["C","S"]},
+  {word:"GIROUETTE",syllables:["GI","ROUET","TE"],emoji:"🌀",theme:"jouets",sounds:["G","J"]},
+  {word:"ZINZIN",syllables:["ZIN","ZIN"],emoji:"🤪",theme:"jouets",sounds:["Z"]},
+  {word:"SOCCER",syllables:["SOC","CER"],emoji:"⚽",theme:"sports",sounds:["S","C"]},
+  {word:"SKI",syllables:["SKI"],emoji:"⛷️",theme:"sports",sounds:["S","C"]},
+  {word:"CYCLISME",syllables:["CY","CLIS","ME"],emoji:"🚴",theme:"sports",sounds:["S","C"]},
+  {word:"COURSE",syllables:["COUR","SE"],emoji:"🏃",theme:"sports",sounds:["C","S"]},
+  {word:"JUDO",syllables:["JU","DO"],emoji:"🥋",theme:"sports",sounds:["J"]},
+  {word:"JONGLAGE",syllables:["JON","GLA","GE"],emoji:"🤹",theme:"sports",sounds:["J","G"]},
+  {word:"GYM",syllables:["GYM"],emoji:"🤸",theme:"sports",sounds:["G","J"]},
+  {word:"GRIMPER",syllables:["GRIM","PER"],emoji:"🧗",theme:"sports",sounds:["G"]},
+  {word:"GLISSADE",syllables:["GLI","SSA","DE"],emoji:"🛷",theme:"sports",sounds:["G","S"]},
+  {word:"NATATION",syllables:["NA","TA","TION"],emoji:"🏊",theme:"sports",sounds:[]},
+  {word:"BASKET",syllables:["BAS","KET"],emoji:"🏀",theme:"sports",sounds:["S"]},
+  {word:"TENNIS",syllables:["TEN","NIS"],emoji:"🎾",theme:"sports",sounds:[]},
+  {word:"BOXE",syllables:["BOX","SE"],emoji:"🥊",theme:"sports",sounds:["S"]},
+  {word:"ZUMBA",syllables:["ZUM","BA"],emoji:"💃",theme:"sports",sounds:["Z"]},
+  {word:"CERCEAUX",syllables:["CER","CEAUX"],emoji:"⭕",theme:"sports",sounds:["C","S"]},
+  {word:"PRINCESSE",syllables:["PRIN","CES","SE"],emoji:"👸",theme:"princesse",sounds:["C","S"]},
+  {word:"CHÂTEAU",syllables:["CHÂ","TEAU"],emoji:"🏰",theme:"princesse",sounds:["CH"]},
+  {word:"COURONNE",syllables:["COU","RON","NE"],emoji:"👑",theme:"princesse",sounds:["C"]},
+  {word:"SCEPTRE",syllables:["SCEP","TRE"],emoji:"🔱",theme:"princesse",sounds:["S","C"]},
+  {word:"CHEVALIER",syllables:["CHE","VA","LIER"],emoji:"🤺",theme:"princesse",sounds:["CH"]},
+  {word:"SORTILÈGE",syllables:["SOR","TI","LÈ","GE"],emoji:"✨",theme:"princesse",sounds:["S","G","J"]},
+  {word:"SIRÈNE",syllables:["SI","RÈ","NE"],emoji:"🧜",theme:"princesse",sounds:["S"]},
+  {word:"CITROUILLE",syllables:["CI","TROUIL","LE"],emoji:"🎃",theme:"princesse",sounds:["C"]},
+  {word:"CARROSSE",syllables:["CAR","ROS","SE"],emoji:"🪄",theme:"princesse",sounds:["C","S"]},
+  {word:"CHAUSSURE",syllables:["CHAUS","SU","RE"],emoji:"👠",theme:"princesse",sounds:["CH","S"]},
+  {word:"GRIMOIRE",syllables:["GRI","MOIRE"],emoji:"📖",theme:"princesse",sounds:["G"]},
+  {word:"JARDIN",syllables:["JAR","DIN"],emoji:"🌹",theme:"princesse",sounds:["J"]},
+  {word:"SORCIÈRE",syllables:["SOR","CIÈRE"],emoji:"🧙",theme:"princesse",sounds:["S","C"]},
+  {word:"GEMME",syllables:["GEM","ME"],emoji:"💎",theme:"princesse",sounds:["G","J"]},
+  {word:"CHAPERON",syllables:["CHA","PE","RON"],emoji:"🧣",theme:"princesse",sounds:["CH"]},
+  {word:"FESTIN",syllables:["FES","TIN"],emoji:"🍽️",theme:"princesse",sounds:["S"]},
+  {word:"GALERIE",syllables:["GA","LE","RIE"],emoji:"🖼️",theme:"princesse",sounds:["G"]},
+  {word:"COFFRE",syllables:["COF","FRE"],emoji:"🪙",theme:"princesse",sounds:["C"]},
+  {word:"JONQUILLE",syllables:["JON","QUIL","LE"],emoji:"🌼",theme:"princesse",sounds:["J"]},
+  {word:"ZAZIE",syllables:["ZA","ZIE"],emoji:"🧝",theme:"princesse",sounds:["Z"]},
+];
+
+let activeThemes = new Set(["animaux"]);
+let activeSounds = new Set();
+let playlist = [], idx = 0, tokens = 0, answered = false;
+let girlVoice = null;
+
+function pickGirlVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  const fr = voices.filter(v => v.lang.startsWith('fr'));
+  const female = fr.find(v => /female|fille|femme|woman|amélie|lea|léa|virginie|julie/i.test(v.name));
+  return female || fr[0] || voices[0] || null;
+}
+
+function speakCurrent() {
+  if (!window.speechSynthesis) return;
+  const w = current(); if (!w) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(w.word);
+  u.lang = 'fr-FR'; u.rate = 0.8; u.pitch = 1.6;
+  if (girlVoice) u.voice = girlVoice;
+  window.speechSynthesis.speak(u);
+}
+
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const plain = text.replace(/[\u{1F300}-\u{1FAFF}]/gu, '').trim();
+  const u = new SpeechSynthesisUtterance(plain);
+  u.lang = 'fr-FR'; u.rate = 0.9; u.pitch = 1.6;
+  if (girlVoice) u.voice = girlVoice;
+  window.speechSynthesis.speak(u);
+}
+
+function makeStar(num) {
+  const div = document.createElement('div');
+  div.className = 'star-token';
+  div.innerHTML = '<svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg"><polygon points="29,4 35.5,21 54,21 39.5,32 45,49 29,38 13,49 18.5,32 4,21 22.5,21" fill="#AFA9EC" stroke="#7F77DD" stroke-width="2.5" stroke-linejoin="round" class="star-poly"/></svg><span class="star-num">' + num + '</span>';
+  return div;
+}
+
+function addToken() {
+  if (answered) return;
+  tokens++;
+  const zone = document.getElementById('tokens-zone');
+  if (tokens === 1) zone.innerHTML = '';
+  const star = makeStar(tokens);
+  star.onclick = () => removeToken(star);
+  zone.appendChild(star);
+}
+
+function removeToken(el) {
+  if (answered) return;
+  el.remove(); tokens--;
+  document.querySelectorAll('.star-token .star-num').forEach((n,i) => n.textContent = i+1);
+  if (!tokens) document.getElementById('tokens-zone').innerHTML = '<span style="color:#bbb;font-size:14px">Place tes étoiles ici !</span>';
+}
+
+function colorTokens(result) {
+  const fill = result === 'correct' ? '#C0DD97' : '#F0997B';
+  const stroke = result === 'correct' ? '#639922' : '#D85A30';
+  const col = result === 'correct' ? '#173404' : '#4A1B0C';
+  document.querySelectorAll('.star-poly').forEach(p => { p.setAttribute('fill', fill); p.setAttribute('stroke', stroke); });
+  document.querySelectorAll('.star-num').forEach(n => n.style.color = col);
+}
+
+function toggleFilter(el) {
+  const type = el.dataset.type, val = el.dataset.val;
+  if (type === 'theme') {
+    if (activeThemes.has(val)) { activeThemes.delete(val); el.classList.remove('theme-active'); }
+    else { activeThemes.add(val); el.classList.add('theme-active'); }
+  } else {
+    if (activeSounds.has(val)) { activeSounds.delete(val); el.classList.remove('sound-active'); }
+    else { activeSounds.add(val); el.classList.add('sound-active'); }
+  }
+  rebuildPlaylist();
+}
+
+function rebuildPlaylist() {
+  let filtered = ALL_WORDS.filter(w => activeThemes.has(w.theme));
+  if (activeSounds.size > 0) filtered = filtered.filter(w => [...activeSounds].some(s => w.sounds.includes(s)));
+  playlist = filtered.sort(() => Math.random() - 0.5);
+  idx = 0; tokens = 0; answered = false;
+  const empty = document.getElementById('empty-msg');
+  const area = document.getElementById('game-area');
+  if (!playlist.length) { empty.style.display = 'block'; area.style.display = 'none'; }
+  else { empty.style.display = 'none'; area.style.display = 'block'; render(); }
+}
+
+function current() { return playlist[idx]; }
+
+function highlightWord(word, sounds) {
+  if (!sounds || !sounds.length) return word;
+  const p = [];
+  if (sounds.includes('CH')) p.push('CH');
+  if (sounds.includes('S')) p.push('S');
+  if (sounds.includes('C')) p.push('C');
+  if (sounds.includes('Z')) p.push('Z');
+  if (sounds.includes('G')) p.push('G');
+  if (sounds.includes('J')) p.push('J');
+  return word.replace(new RegExp('(' + p.join('|') + ')', 'gi'), '<span class="hs">$1</span>');
+}
+
+function render() {
+  const w = current(); if (!w) return;
+  document.getElementById('word-display').innerHTML = w.emoji + ' ' + highlightWord(w.word, w.sounds);
+  document.getElementById('tokens-zone').innerHTML = '<span style="color:#bbb;font-size:14px">Place tes étoiles ici !</span>';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('hint').textContent = 'Place une étoile pour chaque syllabe, puis valide !';
+  document.getElementById('counter').textContent = 'Mot ' + (idx+1) + ' / ' + playlist.length;
+  document.getElementById('progress').style.width = ((idx+1)/playlist.length*100) + '%';
+  tokens = 0; answered = false;
+}
+
+function validate() {
+  if (answered || !tokens) return;
+  answered = true;
+  const correct = current().syllables.length;
+  const fb = document.getElementById('feedback');
+  if (tokens === correct) {
+    const msg = pickCorrect();
+    fb.textContent = msg;
+    fb.className = 'feedback correct';
+    colorTokens('correct');
+    speakText(msg);
+  } else {
+    const prefix = pickWrong();
+    const syllCount = correct + (correct > 1 ? ' syllabes' : ' syllabe');
+    fb.textContent = prefix + ' ' + syllCount + ' !';
+    fb.className = 'feedback wrong';
+    colorTokens('wrong');
+    speakText(prefix + ' ' + syllCount);
+  }
+  document.getElementById('hint').textContent = current().syllables.join(' · ');
+  const nb = document.getElementById('next-btn');
+  nb.textContent = (idx+1 < playlist.length) ? 'Suivant →' : 'Rejouer 🔄';
+  nb.style.display = 'block';
+}
+
+function nextWord() {
+  idx++;
+  if (idx >= playlist.length) { idx = 0; playlist.sort(() => Math.random() - 0.5); }
+  render();
+}
+
+if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+  window.speechSynthesis.onvoiceschanged = () => { girlVoice = pickGirlVoice(); };
+}
+setTimeout(() => { girlVoice = pickGirlVoice(); }, 400);
+rebuildPlaylist();
+</script>
+</body>
+</html>
