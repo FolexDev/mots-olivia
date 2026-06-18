@@ -52,6 +52,74 @@
   .feedback.wrong { color: #A32D2D; }
   .hint { text-align: center; font-size: 13px; color: #aaa; margin-top: 0.4rem; letter-spacing: 1px; }
   .empty-msg { text-align: center; color: #aaa; font-size: 15px; padding: 2rem 1rem; }
+  /* Collapsible filter sections */
+  .filter-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .filter-header .section-label { margin-bottom: 0; }
+  .filter-toggle { font-size: 12px; color: #AFA9EC; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .filter-toggle .arrow { transition: transform 0.2s; display: inline-block; }
+  .filter-toggle .arrow.collapsed { transform: rotate(-90deg); }
+  .filters-wrap { overflow: hidden; transition: max-height 0.25s ease; }
+  .filters-wrap.collapsed { max-height: 0 !important; }
+  .active-summary { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.5rem; min-height: 0; }
+  .active-pill { padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600; }
+  .active-pill.theme { background: #9FE1CB; color: #04342C; }
+  .active-pill.sound { background: #FAC775; color: #412402; }
+  /* Quit confirm modal */
+  .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
+  .confirm-overlay.open { display: flex; }
+  .confirm-modal { background: #fff; border-radius: 20px; max-width: 340px; width: 100%; padding: 1.6rem 1.4rem; text-align: center; }
+  .confirm-modal h3 { font-size: 17px; font-weight: 700; color: #3C3489; margin-bottom: 0.6rem; }
+  .confirm-modal p { font-size: 14px; color: #666; margin-bottom: 1.2rem; line-height: 1.5; }
+  .confirm-actions { display: flex; gap: 10px; }
+  .confirm-actions button { flex: 1; padding: 12px; border-radius: 50px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn-cancel-quit { background: #ede9fa; color: #3C3489; }
+  .btn-confirm-quit { background: #F0997B; color: #4A1B0C; }
+  /* Quit button in game */
+  .quit-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; padding: 4px; -webkit-tap-highlight-color: transparent; }
+  .quit-btn:active { color: #F0997B; }
+  .word-card { position: relative; }
+  .launch-panel { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.2rem 1rem; margin-bottom: 0.8rem; }
+  .launch-panel h3 { font-size: 15px; font-weight: 600; color: #3C3489; margin-bottom: 0.8rem; text-align: center; }
+  .word-count-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .count-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ccc; background: #fff; color: #555; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .count-btn.selected { background: #7F77DD; border-color: #7F77DD; color: #fff; }
+  .count-btn.custom-btn { width: auto; padding: 0 14px; border-radius: 50px; font-size: 13px; }
+  .custom-count-row { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 1rem; }
+  .custom-count-row input { width: 70px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid #ccc; font-size: 16px; text-align: center; font-family: inherit; outline: none; }
+  .custom-count-row input:focus { border-color: #7F77DD; }
+  .launch-btn { display: block; width: 100%; padding: 14px; border-radius: 50px; background: #7F77DD; color: #fff; border: none; font-size: 17px; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; }
+  .launch-btn:active { transform: scale(0.97); }
+  .launch-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  /* Results modal */
+  .results-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+  .results-overlay.open { display: flex; }
+  .results-modal { background: #fff; border-radius: 24px; max-width: 500px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 1.6rem 1.2rem 1.4rem; }
+  .results-modal h2 { text-align: center; font-size: 20px; font-weight: 700; color: #3C3489; margin-bottom: 0.3rem; }
+  .results-score { text-align: center; font-size: 44px; font-weight: 700; margin: 0.6rem 0 0.2rem; }
+  .results-score.great { color: #3B6D11; }
+  .results-score.ok { color: #BA7517; }
+  .results-score.low { color: #A32D2D; }
+  .results-subtitle { text-align: center; font-size: 14px; color: #888; margin-bottom: 1.2rem; }
+  .results-stats { display: flex; gap: 12px; justify-content: center; margin-bottom: 1.2rem; }
+  .stat-box { flex: 1; border-radius: 14px; padding: 12px 8px; text-align: center; }
+  .stat-box.good { background: #edfce6; }
+  .stat-box.bad  { background: #fde8e8; }
+  .stat-box .stat-num { font-size: 28px; font-weight: 700; }
+  .stat-box.good .stat-num { color: #3B6D11; }
+  .stat-box.bad  .stat-num { color: #A32D2D; }
+  .stat-box .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+  .results-list { margin-bottom: 1.2rem; }
+  .results-list h3 { font-size: 13px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .result-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 10px; margin-bottom: 4px; font-size: 14px; }
+  .result-item.correct { background: #edfce6; }
+  .result-item.wrong   { background: #fde8e8; }
+  .result-item .ri-word { font-weight: 700; flex: 1; color: #2C2C2A; }
+  .result-item .ri-answer { font-size: 12px; color: #888; }
+  .result-item .ri-icon { font-size: 16px; }
+  .results-actions { display: flex; gap: 10px; }
+  .results-actions button { flex: 1; padding: 12px; border-radius: 50px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn-retry { background: #AFA9EC; color: #26215C; }
+  .btn-new   { background: #9FE1CB; color: #04342C; }
   @media (max-width: 400px) {
     .word-display { font-size: 34px; }
     .star-token { width: 48px; height: 48px; }
@@ -60,6 +128,31 @@
 </style>
 </head>
 <body>
+
+<!-- RESULTS MODAL -->
+<div class="results-overlay" id="results-overlay">
+  <div class="results-modal">
+    <h2 id="results-title">Fin de partie !</h2>
+    <div class="results-score" id="results-pct"></div>
+    <div class="results-subtitle" id="results-subtitle"></div>
+    <div class="results-stats">
+      <div class="stat-box good"><div class="stat-num" id="stat-correct">0</div><div class="stat-label">✅ Justes</div></div>
+      <div class="stat-box bad"> <div class="stat-num" id="stat-wrong">0</div> <div class="stat-label">❌ Faux</div></div>
+    </div>
+    <div class="results-list">
+      <h3>✅ Bien trouvés</h3>
+      <div id="list-correct"></div>
+    </div>
+    <div class="results-list">
+      <h3>❌ À retravailler</h3>
+      <div id="list-wrong"></div>
+    </div>
+    <div class="results-actions">
+      <button class="btn-retry" onclick="retrySession()">🔁 Rejouer</button>
+      <button class="btn-new"   onclick="newSession()">🎯 Nouvelle partie</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
@@ -90,45 +183,91 @@
   </div>
 </div>
 
+<!-- CONFIRM QUIT -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-modal">
+    <h3>Quitter la partie ?</h3>
+    <p>Les réponses données ne seront pas enregistrées. Tu veux vraiment arrêter ?</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel-quit" onclick="document.getElementById('confirm-overlay').classList.remove('open')">Continuer</button>
+      <button class="btn-confirm-quit" onclick="confirmQuit()">Quitter</button>
+    </div>
+  </div>
+</div>
+
 <div class="game">
   <div class="header">
     <h1>🌟 Mots Olivia</h1>
     <button class="info-btn" onclick="document.getElementById('modal-overlay').classList.add('open')">?</button>
   </div>
 
-  <div class="section-label">Thème</div>
-  <div class="filters" id="theme-tags">
-    <span class="tag theme-active" data-type="theme" data-val="animaux" onclick="toggleFilter(this)">🐾 Animaux</span>
-    <span class="tag" data-type="theme" data-val="nourriture" onclick="toggleFilter(this)">🍎 Nourriture</span>
-    <span class="tag" data-type="theme" data-val="nature" onclick="toggleFilter(this)">🌿 Nature</span>
-    <span class="tag" data-type="theme" data-val="transports" onclick="toggleFilter(this)">🚗 Transports</span>
-    <span class="tag" data-type="theme" data-val="maison" onclick="toggleFilter(this)">🏠 Maison</span>
-    <span class="tag" data-type="theme" data-val="corps" onclick="toggleFilter(this)">🖐️ Corps</span>
-    <span class="tag" data-type="theme" data-val="vetements" onclick="toggleFilter(this)">👕 Vêtements</span>
-    <span class="tag" data-type="theme" data-val="ecole" onclick="toggleFilter(this)">✏️ École</span>
-    <span class="tag" data-type="theme" data-val="jouets" onclick="toggleFilter(this)">🧸 Jouets</span>
-    <span class="tag" data-type="theme" data-val="sports" onclick="toggleFilter(this)">⚽ Sports</span>
-    <span class="tag" data-type="theme" data-val="princesse" onclick="toggleFilter(this)">👸 Princesse</span>
-    <span class="tag" data-type="theme" data-val="famille" onclick="toggleFilter(this)">👨‍👩‍👧 Famille</span>
-    <span class="tag" data-type="theme" data-val="amis" onclick="toggleFilter(this)">🤝 Amis</span>
-    <span class="tag" data-type="theme" data-val="sciences" onclick="toggleFilter(this)">🔬 Sciences</span>
-    <span class="tag" data-type="theme" data-val="emotions" onclick="toggleFilter(this)">🧠 Émotions</span>
-    <span class="tag" data-type="theme" data-val="contes" onclick="toggleFilter(this)">🐉 Contes & magie</span>
-    <span class="tag" data-type="theme" data-val="art" onclick="toggleFilter(this)">🎨 Art & création</span>
+  <div class="filter-header" onclick="toggleSection('themes')">
+    <span class="section-label">Thèmes</span>
+    <span class="filter-toggle"><span id="themes-arrow" class="arrow">▾</span> <span id="themes-toggle-label">réduire</span></span>
   </div>
+  <div id="themes-active-summary" class="active-summary"></div>
+  <div class="filters-wrap" id="themes-wrap">
+    <div class="filters" id="theme-tags">
+      <span class="tag theme-active" data-type="theme" data-val="animaux" onclick="toggleFilter(this)">🐾 Animaux</span>
+      <span class="tag" data-type="theme" data-val="nourriture" onclick="toggleFilter(this)">🍎 Nourriture</span>
+      <span class="tag" data-type="theme" data-val="nature" onclick="toggleFilter(this)">🌿 Nature</span>
+      <span class="tag" data-type="theme" data-val="transports" onclick="toggleFilter(this)">🚗 Transports</span>
+      <span class="tag" data-type="theme" data-val="maison" onclick="toggleFilter(this)">🏠 Maison</span>
+      <span class="tag" data-type="theme" data-val="corps" onclick="toggleFilter(this)">🖐️ Corps</span>
+      <span class="tag" data-type="theme" data-val="vetements" onclick="toggleFilter(this)">👕 Vêtements</span>
+      <span class="tag" data-type="theme" data-val="ecole" onclick="toggleFilter(this)">✏️ École</span>
+      <span class="tag" data-type="theme" data-val="jouets" onclick="toggleFilter(this)">🧸 Jouets</span>
+      <span class="tag" data-type="theme" data-val="sports" onclick="toggleFilter(this)">⚽ Sports</span>
+      <span class="tag" data-type="theme" data-val="princesse" onclick="toggleFilter(this)">👸 Princesse</span>
+      <span class="tag" data-type="theme" data-val="famille" onclick="toggleFilter(this)">👨‍👩‍👧 Famille</span>
+      <span class="tag" data-type="theme" data-val="amis" onclick="toggleFilter(this)">🤝 Amis</span>
+      <span class="tag" data-type="theme" data-val="sciences" onclick="toggleFilter(this)">🔬 Sciences</span>
+      <span class="tag" data-type="theme" data-val="emotions" onclick="toggleFilter(this)">🧠 Émotions</span>
+      <span class="tag" data-type="theme" data-val="contes" onclick="toggleFilter(this)">🐉 Contes & magie</span>
+      <span class="tag" data-type="theme" data-val="art" onclick="toggleFilter(this)">🎨 Art & création</span>
+    </div>
+  </div>
+
   <div class="separator"></div>
-  <div class="section-label">Sons</div>
-  <div class="filters" style="margin-bottom:0.8rem">
-    <span class="tag" data-type="sound" data-val="S" onclick="toggleFilter(this)">S</span>
-    <span class="tag" data-type="sound" data-val="C" onclick="toggleFilter(this)">C</span>
-    <span class="tag" data-type="sound" data-val="CH" onclick="toggleFilter(this)">CH</span>
-    <span class="tag" data-type="sound" data-val="Z" onclick="toggleFilter(this)">Z</span>
-    <span class="tag" data-type="sound" data-val="G" onclick="toggleFilter(this)">G</span>
-    <span class="tag" data-type="sound" data-val="J" onclick="toggleFilter(this)">J</span>
+
+  <div class="filter-header" onclick="toggleSection('sounds')">
+    <span class="section-label">Sons</span>
+    <span class="filter-toggle"><span id="sounds-arrow" class="arrow">▾</span> <span id="sounds-toggle-label">réduire</span></span>
+  </div>
+  <div id="sounds-active-summary" class="active-summary"></div>
+  <div class="filters-wrap" id="sounds-wrap" style="margin-bottom:0.8rem">
+    <div class="filters">
+      <span class="tag" data-type="sound" data-val="S" onclick="toggleFilter(this)">S</span>
+      <span class="tag" data-type="sound" data-val="C" onclick="toggleFilter(this)">C</span>
+      <span class="tag" data-type="sound" data-val="CH" onclick="toggleFilter(this)">CH</span>
+      <span class="tag" data-type="sound" data-val="Z" onclick="toggleFilter(this)">Z</span>
+      <span class="tag" data-type="sound" data-val="G" onclick="toggleFilter(this)">G</span>
+      <span class="tag" data-type="sound" data-val="J" onclick="toggleFilter(this)">J</span>
+    </div>
   </div>
 
   <div id="empty-msg" class="empty-msg" style="display:none">Aucun mot trouvé avec ces filtres.</div>
-  <div id="game-area" class="word-card">
+
+  <!-- LAUNCH PANEL -->
+  <div class="launch-panel" id="launch-panel">
+    <h3>🎯 Combien de mots pour cette partie ?</h3>
+    <div class="word-count-row" id="count-btns">
+      <button class="count-btn selected" data-count="5" onclick="selectCount(this)">5</button>
+      <button class="count-btn" data-count="10" onclick="selectCount(this)">10</button>
+      <button class="count-btn" data-count="15" onclick="selectCount(this)">15</button>
+      <button class="count-btn" data-count="20" onclick="selectCount(this)">20</button>
+      <button class="count-btn" data-count="30" onclick="selectCount(this)">30</button>
+      <button class="count-btn custom-btn" data-count="custom" onclick="selectCount(this)">Autre</button>
+    </div>
+    <div class="custom-count-row" id="custom-row" style="display:none">
+      <label style="font-size:13px;color:#888">Nombre :</label>
+      <input type="number" id="custom-count-input" min="1" max="200" value="25" oninput="updateCustomCount()"/>
+    </div>
+    <button class="launch-btn" id="launch-btn" onclick="launchSession()">▶ Lancer la partie</button>
+  </div>
+
+  <div id="game-area" class="word-card" style="display:none">
+    <button class="quit-btn" onclick="askQuit()" title="Quitter la partie">✕</button>
     <div class="counter-display" id="counter"></div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progress" style="width:0%"></div></div>
     <div class="word-display" id="word-display"></div>
@@ -1059,6 +1198,13 @@ let activeSounds = new Set();
 let playlist = [], idx = 0, tokens = 0, answered = false;
 let maleVoice = null;
 
+// Session state
+let sessionSize = 5;
+let sessionPlaylist = [];
+let sessionIdx = 0;
+let sessionResults = []; // {word, correct:bool, given:int, expected:int}
+let inSession = false;
+
 function pickMaleVoice() {
   const voices = window.speechSynthesis.getVoices();
   const fr = voices.filter(v => v.lang.startsWith('fr'));
@@ -1068,7 +1214,7 @@ function pickMaleVoice() {
 
 function speakCurrent() {
   if (!window.speechSynthesis) return;
-  const w = current(); if (!w) return;
+  const w = currentWord(); if (!w) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(w.word);
   u.lang = 'fr-FR'; u.rate = 0.8; u.pitch = 0.7;
@@ -1091,6 +1237,81 @@ function closeModal(e) {
     document.getElementById('modal-overlay').classList.remove('open');
 }
 
+// ── COUNT SELECTION ───────────────────────────────────────────────
+function selectCount(btn) {
+  document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const customRow = document.getElementById('custom-row');
+  if (btn.dataset.count === 'custom') {
+    customRow.style.display = 'flex';
+    updateCustomCount();
+  } else {
+    customRow.style.display = 'none';
+    sessionSize = parseInt(btn.dataset.count);
+  }
+  updateLaunchBtn();
+}
+
+function updateCustomCount() {
+  const val = parseInt(document.getElementById('custom-count-input').value) || 0;
+  sessionSize = val;
+  updateLaunchBtn();
+}
+
+function updateLaunchBtn() {
+  const btn = document.getElementById('launch-btn');
+  const available = getFiltered().length;
+  if (sessionSize < 1 || available === 0) {
+    btn.disabled = true;
+    btn.textContent = available === 0 ? 'Aucun mot disponible' : '▶ Lancer la partie';
+  } else {
+    btn.disabled = false;
+    const actual = Math.min(sessionSize, available);
+    btn.textContent = '▶ Lancer la partie (' + actual + ' mots)';
+  }
+}
+
+function getFiltered() {
+  let f = ALL_WORDS.filter(w => activeThemes.has(w.theme));
+  if (activeSounds.size > 0) f = f.filter(w => [...activeSounds].some(s => w.sounds.includes(s)));
+  return f;
+}
+
+// ── LAUNCH SESSION ────────────────────────────────────────────────
+function launchSession() {
+  const filtered = getFiltered();
+  if (!filtered.length) return;
+  const shuffled = filtered.sort(() => Math.random() - 0.5);
+  sessionPlaylist = shuffled.slice(0, Math.min(sessionSize, shuffled.length));
+  sessionIdx = 0;
+  sessionResults = [];
+  inSession = true;
+  tokens = 0;
+  answered = false;
+  document.getElementById('launch-panel').style.display = 'none';
+  document.getElementById('game-area').style.display = 'block';
+  renderSession();
+}
+
+function currentWord() { return sessionPlaylist[sessionIdx]; }
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderSession() {
+  const w = currentWord(); if (!w) return;
+  const label = w.emoji ? w.emoji + ' ' + w.word : w.word;
+  document.getElementById('word-display').innerHTML = highlightWord(label, w.sounds);
+  document.getElementById('tokens-zone').innerHTML = '<span style="color:#bbb;font-size:14px">Place tes étoiles ici !</span>';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('hint').textContent = 'Place une étoile pour chaque syllabe orale, puis valide !';
+  document.getElementById('counter').textContent = 'Mot ' + (sessionIdx + 1) + ' / ' + sessionPlaylist.length;
+  document.getElementById('progress').style.width = ((sessionIdx + 1) / sessionPlaylist.length * 100) + '%';
+  tokens = 0;
+  answered = false;
+}
+
+// ── TOKENS ────────────────────────────────────────────────────────
 function makeStar(num) {
   const div = document.createElement('div');
   div.className = 'star-token';
@@ -1123,63 +1344,20 @@ function colorTokens(result) {
   document.querySelectorAll('.star-num').forEach(n => n.style.color = col);
 }
 
-function toggleFilter(el) {
-  const type = el.dataset.type, val = el.dataset.val;
-  if (type === 'theme') {
-    if (activeThemes.has(val)) { activeThemes.delete(val); el.classList.remove('theme-active'); }
-    else { activeThemes.add(val); el.classList.add('theme-active'); }
-  } else {
-    if (activeSounds.has(val)) { activeSounds.delete(val); el.classList.remove('sound-active'); }
-    else { activeSounds.add(val); el.classList.add('sound-active'); }
-  }
-  rebuildPlaylist();
-}
-
-function rebuildPlaylist() {
-  let filtered = ALL_WORDS.filter(w => activeThemes.has(w.theme));
-  if (activeSounds.size > 0) filtered = filtered.filter(w => [...activeSounds].some(s => w.sounds.includes(s)));
-  playlist = filtered.sort(() => Math.random() - 0.5);
-  idx = 0; tokens = 0; answered = false;
-  const empty = document.getElementById('empty-msg');
-  const area  = document.getElementById('game-area');
-  if (!playlist.length) { empty.style.display = 'block'; area.style.display = 'none'; }
-  else { empty.style.display = 'none'; area.style.display = 'block'; render(); }
-}
-
-function current() { return playlist[idx]; }
-
-function highlightWord(word, sounds) {
-  if (!sounds || !sounds.length) return word;
-  const p = [];
-  if (sounds.includes('CH')) p.push('CH');
-  if (sounds.includes('S'))  p.push('S');
-  if (sounds.includes('C'))  p.push('C');
-  if (sounds.includes('Z'))  p.push('Z');
-  if (sounds.includes('G'))  p.push('G');
-  if (sounds.includes('J'))  p.push('J');
-  return word.replace(new RegExp('('+p.join('|')+')','gi'),'<span class="hs">$1</span>');
-}
-
-function render() {
-  const w = current(); if (!w) return;
-  const label = w.emoji ? w.emoji + ' ' + w.word : w.word;
-  document.getElementById('word-display').innerHTML = highlightWord(label, w.sounds);
-  document.getElementById('tokens-zone').innerHTML = '<span style="color:#bbb;font-size:14px">Place tes étoiles ici !</span>';
-  document.getElementById('feedback').textContent = '';
-  document.getElementById('feedback').className = 'feedback';
-  document.getElementById('next-btn').style.display = 'none';
-  document.getElementById('hint').textContent = 'Place une étoile pour chaque syllabe orale, puis valide !';
-  document.getElementById('counter').textContent = 'Mot ' + (idx+1) + ' / ' + playlist.length;
-  document.getElementById('progress').style.width = ((idx+1)/playlist.length*100) + '%';
-  tokens = 0; answered = false;
-}
-
+// ── VALIDATE ──────────────────────────────────────────────────────
 function validate() {
   if (answered || !tokens) return;
   answered = true;
-  const correct = current().syllables.length;
+  const w = currentWord();
+  const correct = w.syllables.length;
+  const isCorrect = tokens === correct;
+
+  sessionResults.push({ word: w.word, emoji: w.emoji, correct: isCorrect, given: tokens, expected: correct, syllables: w.syllables });
+
   const fb = document.getElementById('feedback');
-  if (tokens === correct) {
+  const nb = document.getElementById('next-btn');
+
+  if (isCorrect) {
     const msg = pickCorrect();
     fb.textContent = msg;
     fb.className = 'feedback correct';
@@ -1193,23 +1371,210 @@ function validate() {
     colorTokens('wrong');
     speakText(prefix + ' ' + syll);
   }
-  document.getElementById('hint').textContent = current().syllables.join(' · ');
-  const nb = document.getElementById('next-btn');
-  nb.textContent = (idx+1 < playlist.length) ? 'Suivant →' : 'Rejouer 🔄';
+
+  document.getElementById('hint').textContent = w.syllables.join(' · ');
+
+  const isLast = sessionIdx + 1 >= sessionPlaylist.length;
+  nb.textContent = isLast ? 'Voir les résultats 📊' : 'Suivant →';
   nb.style.display = 'block';
 }
 
+// ── NEXT ──────────────────────────────────────────────────────────
 function nextWord() {
-  idx++;
-  if (idx >= playlist.length) { idx = 0; playlist.sort(() => Math.random()-0.5); }
-  render();
+  sessionIdx++;
+  if (sessionIdx >= sessionPlaylist.length) {
+    showResults();
+    return;
+  }
+  tokens = 0; answered = false;
+  renderSession();
+}
+
+// ── RESULTS ───────────────────────────────────────────────────────
+function showResults() {
+  const total = sessionResults.length;
+  const nbCorrect = sessionResults.filter(r => r.correct).length;
+  const nbWrong = total - nbCorrect;
+  const pct = Math.round(nbCorrect / total * 100);
+
+  document.getElementById('stat-correct').textContent = nbCorrect;
+  document.getElementById('stat-wrong').textContent = nbWrong;
+
+  const pctEl = document.getElementById('results-pct');
+  pctEl.textContent = pct + '%';
+  pctEl.className = 'results-score ' + (pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low');
+
+  const msgs = {
+    great: ['Excellent travail, Olivia ! 🌟', 'Bravo, tu déchires ! 🎉', 'Trop forte, Olivia ! 🏆'],
+    ok:    ['Pas mal, continue ! 💪', 'Bien joué, on progresse ! 👍', 'Bonne session, Olivia !'],
+    low:   ['On va y arriver ! 😊', 'Encore un effort, Olivia ! 🌈', 'La pratique rend parfait !']
+  };
+  const bucket = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low';
+  const arr = msgs[bucket];
+  document.getElementById('results-subtitle').textContent =
+    arr[Math.floor(Math.random() * arr.length)] +
+    ' — ' + nbCorrect + ' juste' + (nbCorrect > 1 ? 's' : '') + ' sur ' + total;
+
+  // Lists
+  const listC = document.getElementById('list-correct');
+  const listW = document.getElementById('list-wrong');
+  listC.innerHTML = '';
+  listW.innerHTML = '';
+
+  sessionResults.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'result-item ' + (r.correct ? 'correct' : 'wrong');
+    const wordLabel = (r.emoji || '') + ' ' + r.word;
+    div.innerHTML =
+      '<span class="ri-icon">' + (r.correct ? '✅' : '❌') + '</span>' +
+      '<span class="ri-word">' + wordLabel.trim() + '</span>' +
+      '<span class="ri-answer">' +
+        (r.correct
+          ? r.syllables.join(' · ')
+          : 'Donné : ' + r.given + '  •  Attendu : ' + r.expected + ' (' + r.syllables.join(' · ') + ')'
+        ) +
+      '</span>';
+    (r.correct ? listC : listW).appendChild(div);
+  });
+
+  if (!listC.children.length) listC.innerHTML = '<div style="color:#aaa;font-size:13px;padding:4px 0">Aucun</div>';
+  if (!listW.children.length) listW.innerHTML = '<div style="color:#aaa;font-size:13px;padding:4px 0">Aucun</div>';
+
+  document.getElementById('results-overlay').classList.add('open');
+  speakText(pct + ' pourcent de réussite. ' + (pct >= 80 ? 'Excellent !' : pct >= 50 ? 'Pas mal !' : 'On continue !'));
+}
+
+function retrySession() {
+  // Replay same words in new random order
+  document.getElementById('results-overlay').classList.remove('open');
+  sessionPlaylist = [...sessionPlaylist].sort(() => Math.random() - 0.5);
+  sessionIdx = 0;
+  sessionResults = [];
+  tokens = 0; answered = false;
+  renderSession();
+}
+
+function newSession() {
+  document.getElementById('results-overlay').classList.remove('open');
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('launch-panel').style.display = 'block';
+  inSession = false;
+  updateLaunchBtn();
+}
+
+// ── COLLAPSIBLE SECTIONS ─────────────────────────────────────────
+const sectionState = { themes: true, sounds: true }; // true = expanded
+
+function toggleSection(id) {
+  sectionState[id] = !sectionState[id];
+  const wrap = document.getElementById(id + '-wrap');
+  const arrow = document.getElementById(id + '-arrow');
+  const label = document.getElementById(id + '-toggle-label');
+  if (sectionState[id]) {
+    wrap.style.maxHeight = wrap.scrollHeight + 200 + 'px';
+    wrap.classList.remove('collapsed');
+    arrow.classList.remove('collapsed');
+    label.textContent = 'réduire';
+  } else {
+    wrap.style.maxHeight = wrap.scrollHeight + 'px';
+    requestAnimationFrame(() => { wrap.style.maxHeight = '0'; });
+    wrap.classList.add('collapsed');
+    arrow.classList.add('collapsed');
+    label.textContent = 'afficher';
+  }
+  updateActiveSummaries();
+}
+
+function updateActiveSummaries() {
+  // Themes summary
+  const tSum = document.getElementById('themes-active-summary');
+  tSum.innerHTML = '';
+  if (!sectionState.themes) {
+    activeThemes.forEach(val => {
+      const el = document.querySelector('[data-type="theme"][data-val="' + val + '"]');
+      if (el) {
+        const pill = document.createElement('span');
+        pill.className = 'active-pill theme';
+        pill.textContent = el.textContent;
+        tSum.appendChild(pill);
+      }
+    });
+  }
+  // Sounds summary
+  const sSum = document.getElementById('sounds-active-summary');
+  sSum.innerHTML = '';
+  if (!sectionState.sounds) {
+    if (activeSounds.size === 0) {
+      const pill = document.createElement('span');
+      pill.className = 'active-pill sound';
+      pill.textContent = 'Tous les sons';
+      sSum.appendChild(pill);
+    } else {
+      activeSounds.forEach(val => {
+        const pill = document.createElement('span');
+        pill.className = 'active-pill sound';
+        pill.textContent = val;
+        sSum.appendChild(pill);
+      });
+    }
+  }
+}
+
+// ── QUIT ──────────────────────────────────────────────────────────
+function askQuit() {
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+
+function confirmQuit() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('launch-panel').style.display = 'block';
+  inSession = false;
+  sessionResults = [];
+  sessionIdx = 0;
+  tokens = 0;
+  answered = false;
+  updateLaunchBtn();
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────
+function toggleFilter(el) {
+  const type = el.dataset.type, val = el.dataset.val;
+  if (type === 'theme') {
+    if (activeThemes.has(val)) { activeThemes.delete(val); el.classList.remove('theme-active'); }
+    else { activeThemes.add(val); el.classList.add('theme-active'); }
+  } else {
+    if (activeSounds.has(val)) { activeSounds.delete(val); el.classList.remove('sound-active'); }
+    else { activeSounds.add(val); el.classList.add('sound-active'); }
+  }
+  updateActiveSummaries();
+  if (!inSession) updateLaunchBtn();
+}
+
+function highlightWord(word, sounds) {
+  if (!sounds || !sounds.length) return word;
+  const p = [];
+  if (sounds.includes('CH')) p.push('CH');
+  if (sounds.includes('S'))  p.push('S');
+  if (sounds.includes('C'))  p.push('C');
+  if (sounds.includes('Z'))  p.push('Z');
+  if (sounds.includes('G'))  p.push('G');
+  if (sounds.includes('J'))  p.push('J');
+  return word.replace(new RegExp('('+p.join('|')+')','gi'),'<span class="hs">$1</span>');
 }
 
 if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
   window.speechSynthesis.onvoiceschanged = () => { maleVoice = pickMaleVoice(); };
 }
 setTimeout(() => { maleVoice = pickMaleVoice(); }, 400);
-rebuildPlaylist();
+
+// Init wrap heights for smooth animation
+['themes', 'sounds'].forEach(id => {
+  const wrap = document.getElementById(id + '-wrap');
+  if (wrap) wrap.style.maxHeight = wrap.scrollHeight + 200 + 'px';
+});
+updateActiveSummaries();
+updateLaunchBtn();
 </script>
 </body>
 </html>
