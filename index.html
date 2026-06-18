@@ -2179,12 +2179,88 @@ function getFiltered() {
   return f;
 }
 
+// ── ROTATION (Fisher-Yates + mémoire persistante) ─────────────────
+const ROTATION_KEY = 'mots_olivia_rotation';
+
+function fisherYates(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getRotationKey() {
+  // Unique key per filter combination
+  const themes = [...activeThemes].sort().join(',');
+  const sounds = [...activeSounds].sort().join(',');
+  return themes + '|' + sounds;
+}
+
+function loadRotation() {
+  try { return JSON.parse(localStorage.getItem(ROTATION_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+function saveRotation(data) {
+  try { localStorage.setItem(ROTATION_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function getNextWords(count) {
+  const filtered = getFiltered();
+  if (!filtered.length) return [];
+  const key = getRotationKey();
+  const rot = loadRotation();
+
+  // Seen = list of word keys already shown for this filter combo
+  let seen = rot[key] || [];
+  const allKeys = filtered.map(w => w.theme + ':' + w.word);
+
+  // Remove from seen any words no longer in filtered (filter changed)
+  seen = seen.filter(k => allKeys.includes(k));
+
+  // Unseen = words not yet shown
+  let unseen = allKeys.filter(k => !seen.includes(k));
+
+  // If unseen pool is too small to cover count, refill from seen
+  // keeping the most recently seen at the end (they go last)
+  let pool = [];
+  if (unseen.length >= count) {
+    // Happy path: enough unseen words
+    pool = unseen;
+  } else {
+    // Refill: append seen words (shuffled) after unseen
+    pool = [...unseen, ...fisherYates(seen)];
+    // Reset seen since we're cycling
+    seen = [];
+  }
+
+  // Fisher-Yates on the unseen portion only
+  const unshuffledUnseen = pool.slice(0, unseen.length);
+  const shuffledUnseen = fisherYates(unshuffledUnseen);
+  const finalPool = [...shuffledUnseen, ...pool.slice(unseen.length)];
+
+  // Pick the first `count` words
+  const pickedKeys = finalPool.slice(0, Math.min(count, finalPool.length));
+
+  // Map keys back to word objects
+  const wordMap = {};
+  filtered.forEach(w => { wordMap[w.theme + ':' + w.word] = w; });
+  const picked = pickedKeys.map(k => wordMap[k]).filter(Boolean);
+
+  // Update seen: add picked to seen
+  const newSeen = [...seen, ...pickedKeys].slice(-allKeys.length);
+  rot[key] = newSeen;
+  saveRotation(rot);
+
+  return picked;
+}
+
 // ── LAUNCH SESSION ────────────────────────────────────────────────
 function launchSession() {
   const filtered = getFiltered();
   if (!filtered.length) return;
-  const shuffled = filtered.sort(() => Math.random() - 0.5);
-  sessionPlaylist = shuffled.slice(0, Math.min(sessionSize, shuffled.length));
+  sessionPlaylist = getNextWords(sessionSize);
   sessionIdx = 0;
   sessionResults = [];
   inSession = true;
