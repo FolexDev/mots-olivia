@@ -52,18 +52,23 @@
   .feedback.wrong { color: #A32D2D; }
   .hint { text-align: center; font-size: 13px; color: #aaa; margin-top: 0.4rem; letter-spacing: 1px; }
   .empty-msg { text-align: center; color: #aaa; font-size: 15px; padding: 2rem 1rem; }
-  /* Collapsible filter sections */
-  .filter-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
-  .filter-header .section-label { margin-bottom: 0; }
-  .filter-toggle { font-size: 12px; color: #AFA9EC; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-  .filter-toggle .arrow { transition: transform 0.2s; display: inline-block; }
-  .filter-toggle .arrow.collapsed { transform: rotate(-90deg); }
-  .filters-wrap { overflow: hidden; transition: max-height 0.25s ease; }
-  .filters-wrap.collapsed { max-height: 0 !important; }
-  .active-summary { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.5rem; min-height: 0; }
-  .active-pill { padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600; }
-  .active-pill.theme { background: #9FE1CB; color: #04342C; }
-  .active-pill.sound { background: #FAC775; color: #412402; }
+  /* Setup card */
+  .setup-card { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.3rem 1.1rem 1.4rem; margin-bottom: 0.8rem; }
+  .setup-title { font-size: 17px; font-weight: 700; color: #3C3489; margin-bottom: 1rem; text-align: center; }
+  .setup-section-label { font-size: 11px; color: #aaa; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
+  .setup-hint { font-size: 10px; color: #ccc; font-weight: 500; text-transform: none; letter-spacing: 0; }
+  .setup-divider { width: 100%; height: 1px; background: #f0eeff; margin: 1rem 0; }
+  /* Launch panel */
+  .word-count-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 0.8rem; flex-wrap: wrap; }
+  .count-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ccc; background: #fff; color: #555; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .count-btn.selected { background: #7F77DD; border-color: #7F77DD; color: #fff; }
+  .count-btn.custom-btn { width: auto; padding: 0 14px; border-radius: 50px; font-size: 13px; }
+  .custom-count-row { display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem; }
+  .custom-count-row input { width: 70px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid #ccc; font-size: 16px; text-align: center; font-family: inherit; outline: none; }
+  .custom-count-row input:focus { border-color: #7F77DD; }
+  .launch-btn { display: block; width: 100%; padding: 14px; border-radius: 50px; background: #7F77DD; color: #fff; border: none; font-size: 17px; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; margin-top: 1rem; }
+  .launch-btn:active { transform: scale(0.97); }
+  .launch-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   /* Quit confirm modal */
   .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 1rem; }
   .confirm-overlay.open { display: flex; }
@@ -78,18 +83,6 @@
   .quit-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; padding: 4px; -webkit-tap-highlight-color: transparent; }
   .quit-btn:active { color: #F0997B; }
   .word-card { position: relative; }
-  .launch-panel { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.2rem 1rem; margin-bottom: 0.8rem; }
-  .launch-panel h3 { font-size: 15px; font-weight: 600; color: #3C3489; margin-bottom: 0.8rem; text-align: center; }
-  .word-count-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .count-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ccc; background: #fff; color: #555; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
-  .count-btn.selected { background: #7F77DD; border-color: #7F77DD; color: #fff; }
-  .count-btn.custom-btn { width: auto; padding: 0 14px; border-radius: 50px; font-size: 13px; }
-  .custom-count-row { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 1rem; }
-  .custom-count-row input { width: 70px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid #ccc; font-size: 16px; text-align: center; font-family: inherit; outline: none; }
-  .custom-count-row input:focus { border-color: #7F77DD; }
-  .launch-btn { display: block; width: 100%; padding: 14px; border-radius: 50px; background: #7F77DD; color: #fff; border: none; font-size: 17px; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; }
-  .launch-btn:active { transform: scale(0.97); }
-  .launch-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   /* Results modal */
   .results-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .results-overlay.open { display: flex; }
@@ -201,12 +194,11 @@
     <button class="info-btn" onclick="document.getElementById('modal-overlay').classList.add('open')">?</button>
   </div>
 
-  <div class="filter-header" onclick="toggleSection('themes')">
-    <span class="section-label">Thèmes</span>
-    <span class="filter-toggle"><span id="themes-arrow" class="arrow">▾</span> <span id="themes-toggle-label">réduire</span></span>
-  </div>
-  <div id="themes-active-summary" class="active-summary"></div>
-  <div class="filters-wrap" id="themes-wrap">
+  <!-- SETUP CARD -->
+  <div class="setup-card" id="setup-card">
+    <div class="setup-title">🎯 Nouvelle partie</div>
+
+    <div class="setup-section-label">Thèmes</div>
     <div class="filters" id="theme-tags">
       <span class="tag theme-active" data-type="theme" data-val="animaux" onclick="toggleFilter(this)">🐾 Animaux</span>
       <span class="tag" data-type="theme" data-val="nourriture" onclick="toggleFilter(this)">🍎 Nourriture</span>
@@ -226,17 +218,11 @@
       <span class="tag" data-type="theme" data-val="contes" onclick="toggleFilter(this)">🐉 Contes & magie</span>
       <span class="tag" data-type="theme" data-val="art" onclick="toggleFilter(this)">🎨 Art & création</span>
     </div>
-  </div>
 
-  <div class="separator"></div>
+    <div class="setup-divider"></div>
 
-  <div class="filter-header" onclick="toggleSection('sounds')">
-    <span class="section-label">Sons</span>
-    <span class="filter-toggle"><span id="sounds-arrow" class="arrow">▾</span> <span id="sounds-toggle-label">réduire</span></span>
-  </div>
-  <div id="sounds-active-summary" class="active-summary"></div>
-  <div class="filters-wrap" id="sounds-wrap" style="margin-bottom:0.8rem">
-    <div class="filters">
+    <div class="setup-section-label">Sons ciblés <span class="setup-hint">facultatif</span></div>
+    <div class="filters" style="margin-bottom:0">
       <span class="tag" data-type="sound" data-val="S" onclick="toggleFilter(this)">S</span>
       <span class="tag" data-type="sound" data-val="C" onclick="toggleFilter(this)">C</span>
       <span class="tag" data-type="sound" data-val="CH" onclick="toggleFilter(this)">CH</span>
@@ -244,13 +230,10 @@
       <span class="tag" data-type="sound" data-val="G" onclick="toggleFilter(this)">G</span>
       <span class="tag" data-type="sound" data-val="J" onclick="toggleFilter(this)">J</span>
     </div>
-  </div>
 
-  <div id="empty-msg" class="empty-msg" style="display:none">Aucun mot trouvé avec ces filtres.</div>
+    <div class="setup-divider"></div>
 
-  <!-- LAUNCH PANEL -->
-  <div class="launch-panel" id="launch-panel">
-    <h3>🎯 Combien de mots pour cette partie ?</h3>
+    <div class="setup-section-label">Nombre de mots</div>
     <div class="word-count-row" id="count-btns">
       <button class="count-btn selected" data-count="5" onclick="selectCount(this)">5</button>
       <button class="count-btn" data-count="10" onclick="selectCount(this)">10</button>
@@ -263,9 +246,13 @@
       <label style="font-size:13px;color:#888">Nombre :</label>
       <input type="number" id="custom-count-input" min="1" max="200" value="25" oninput="updateCustomCount()"/>
     </div>
+
+    <div id="empty-msg" class="empty-msg" style="display:none">Aucun mot trouvé avec ces filtres.</div>
+
     <button class="launch-btn" id="launch-btn" onclick="launchSession()">▶ Lancer la partie</button>
   </div>
 
+  <!-- GAME AREA -->
   <div id="game-area" class="word-card" style="display:none">
     <button class="quit-btn" onclick="askQuit()" title="Quitter la partie">✕</button>
     <div class="counter-display" id="counter"></div>
@@ -1288,7 +1275,7 @@ function launchSession() {
   inSession = true;
   tokens = 0;
   answered = false;
-  document.getElementById('launch-panel').style.display = 'none';
+  document.getElementById('setup-card').style.display = 'none';
   document.getElementById('game-area').style.display = 'block';
   renderSession();
 }
@@ -1457,67 +1444,9 @@ function retrySession() {
 function newSession() {
   document.getElementById('results-overlay').classList.remove('open');
   document.getElementById('game-area').style.display = 'none';
-  document.getElementById('launch-panel').style.display = 'block';
+  document.getElementById('setup-card').style.display = 'block';
   inSession = false;
   updateLaunchBtn();
-}
-
-// ── COLLAPSIBLE SECTIONS ─────────────────────────────────────────
-const sectionState = { themes: true, sounds: true }; // true = expanded
-
-function toggleSection(id) {
-  sectionState[id] = !sectionState[id];
-  const wrap = document.getElementById(id + '-wrap');
-  const arrow = document.getElementById(id + '-arrow');
-  const label = document.getElementById(id + '-toggle-label');
-  if (sectionState[id]) {
-    wrap.style.maxHeight = wrap.scrollHeight + 200 + 'px';
-    wrap.classList.remove('collapsed');
-    arrow.classList.remove('collapsed');
-    label.textContent = 'réduire';
-  } else {
-    wrap.style.maxHeight = wrap.scrollHeight + 'px';
-    requestAnimationFrame(() => { wrap.style.maxHeight = '0'; });
-    wrap.classList.add('collapsed');
-    arrow.classList.add('collapsed');
-    label.textContent = 'afficher';
-  }
-  updateActiveSummaries();
-}
-
-function updateActiveSummaries() {
-  // Themes summary
-  const tSum = document.getElementById('themes-active-summary');
-  tSum.innerHTML = '';
-  if (!sectionState.themes) {
-    activeThemes.forEach(val => {
-      const el = document.querySelector('[data-type="theme"][data-val="' + val + '"]');
-      if (el) {
-        const pill = document.createElement('span');
-        pill.className = 'active-pill theme';
-        pill.textContent = el.textContent;
-        tSum.appendChild(pill);
-      }
-    });
-  }
-  // Sounds summary
-  const sSum = document.getElementById('sounds-active-summary');
-  sSum.innerHTML = '';
-  if (!sectionState.sounds) {
-    if (activeSounds.size === 0) {
-      const pill = document.createElement('span');
-      pill.className = 'active-pill sound';
-      pill.textContent = 'Tous les sons';
-      sSum.appendChild(pill);
-    } else {
-      activeSounds.forEach(val => {
-        const pill = document.createElement('span');
-        pill.className = 'active-pill sound';
-        pill.textContent = val;
-        sSum.appendChild(pill);
-      });
-    }
-  }
 }
 
 // ── QUIT ──────────────────────────────────────────────────────────
@@ -1528,7 +1457,7 @@ function askQuit() {
 function confirmQuit() {
   document.getElementById('confirm-overlay').classList.remove('open');
   document.getElementById('game-area').style.display = 'none';
-  document.getElementById('launch-panel').style.display = 'block';
+  document.getElementById('setup-card').style.display = 'block';
   inSession = false;
   sessionResults = [];
   sessionIdx = 0;
@@ -1547,7 +1476,6 @@ function toggleFilter(el) {
     if (activeSounds.has(val)) { activeSounds.delete(val); el.classList.remove('sound-active'); }
     else { activeSounds.add(val); el.classList.add('sound-active'); }
   }
-  updateActiveSummaries();
   if (!inSession) updateLaunchBtn();
 }
 
@@ -1567,13 +1495,6 @@ if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefin
   window.speechSynthesis.onvoiceschanged = () => { maleVoice = pickMaleVoice(); };
 }
 setTimeout(() => { maleVoice = pickMaleVoice(); }, 400);
-
-// Init wrap heights for smooth animation
-['themes', 'sounds'].forEach(id => {
-  const wrap = document.getElementById(id + '-wrap');
-  if (wrap) wrap.style.maxHeight = wrap.scrollHeight + 200 + 'px';
-});
-updateActiveSummaries();
 updateLaunchBtn();
 </script>
 </body>
