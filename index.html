@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mots Olivia</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7F77DD">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mots Olivia">
+<link rel="apple-touch-icon" href="icon-jeu-mots.png">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #faf8ff; min-height: 100vh; padding-bottom: 2rem; }
@@ -24,13 +30,12 @@
   .modal td { padding: 5px 8px; border-bottom: 1px solid #f0eeff; color: #444; }
   .modal .alert { background: #fff8e6; border-left: 3px solid #FAC775; padding: 8px 10px; border-radius: 0 8px 8px 0; margin: 0.8rem 0; font-size: 13px; color: #5a4000; }
   .modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 20px; cursor: pointer; color: #aaa; }
-  .section-label { font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.6rem; }
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.6rem; justify-content: center; }
   .tag { padding: 6px 13px; border-radius: 50px; border: 1.5px solid #ccc; background: #fff; color: #555; font-size: 13px; cursor: pointer; font-weight: 500; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
   .tag.theme-active { background: #9FE1CB; border-color: #1D9E75; color: #04342C; }
   .tag.sound-active { background: #FAC775; border-color: #BA7517; color: #412402; }
   .separator { width: 100%; height: 1px; background: #e8e4f0; margin: 0.7rem 0; }
-  .word-card { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.2rem 1rem 1rem; margin-bottom: 0.8rem; }
+  .word-card { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.2rem 1rem 1rem; margin-bottom: 0.8rem; position: relative; }
   .counter-display { text-align: center; font-size: 13px; color: #aaa; margin-bottom: 0.4rem; }
   .progress-bar-wrap { background: #ede9fa; border-radius: 20px; height: 7px; overflow: hidden; margin-bottom: 1rem; }
   .progress-bar { height: 7px; border-radius: 20px; background: #7F77DD; transition: width 0.4s; }
@@ -55,15 +60,15 @@
   /* Setup card */
   .setup-card { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.10); padding: 1.3rem 1.1rem 1.4rem; margin-bottom: 0.8rem; }
   .setup-title { font-size: 17px; font-weight: 700; color: #3C3489; margin-bottom: 1rem; text-align: center; }
-  .setup-section-label { font-size: 11px; color: #aaa; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
+  .setup-section-label { font-size: 11px; color: #aaa; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 7px; display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center; }
   .setup-hint { font-size: 10px; color: #ccc; font-weight: 500; text-transform: none; letter-spacing: 0; }
   .setup-divider { width: 100%; height: 1px; background: #f0eeff; margin: 1rem 0; }
   /* Launch panel */
-  .word-count-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 0.8rem; flex-wrap: wrap; }
+  .word-count-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 0.8rem; flex-wrap: wrap; }
   .count-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #ccc; background: #fff; color: #555; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
   .count-btn.selected { background: #7F77DD; border-color: #7F77DD; color: #fff; }
   .count-btn.custom-btn { width: auto; padding: 0 14px; border-radius: 50px; font-size: 13px; }
-  .custom-count-row { display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem; }
+  .custom-count-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 0.8rem; }
   .custom-count-row input { width: 70px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid #ccc; font-size: 16px; text-align: center; font-family: inherit; outline: none; }
   .custom-count-row input:focus { border-color: #7F77DD; }
   .launch-btn { display: block; width: 100%; padding: 14px; border-radius: 50px; background: #7F77DD; color: #fff; border: none; font-size: 17px; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; margin-top: 1rem; }
@@ -82,7 +87,6 @@
   /* Quit button in game */
   .quit-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; padding: 4px; -webkit-tap-highlight-color: transparent; }
   .quit-btn:active { color: #F0997B; }
-  .word-card { position: relative; }
   /* Results modal */
   .results-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .results-overlay.open { display: flex; }
@@ -102,17 +106,40 @@
   .stat-box.bad  .stat-num { color: #A32D2D; }
   .stat-box .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
   .results-list { margin-bottom: 1.2rem; }
-  .results-list h3 { font-size: 13px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .result-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 10px; margin-bottom: 4px; font-size: 14px; }
+  .results-list h3 { font-size: 13px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; text-align: center; }
+  .result-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 10px; margin-bottom: 4px; font-size: 14px; justify-content: center; flex-wrap: wrap; text-align: center; }
   .result-item.correct { background: #edfce6; }
   .result-item.wrong   { background: #fde8e8; }
-  .result-item .ri-word { font-weight: 700; flex: 1; color: #2C2C2A; }
-  .result-item .ri-answer { font-size: 12px; color: #888; }
+  .result-item .ri-word { font-weight: 700; color: #2C2C2A; }
+  .result-item .ri-answer { font-size: 12px; color: #888; width: 100%; text-align: center; }
   .result-item .ri-icon { font-size: 16px; }
   .results-actions { display: flex; gap: 10px; }
   .results-actions button { flex: 1; padding: 12px; border-radius: 50px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .btn-retry { background: #AFA9EC; color: #26215C; }
   .btn-new   { background: #9FE1CB; color: #04342C; }
+  /* History */
+  .history-card { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(127,119,221,0.08); padding: 1.1rem 1.1rem 0.8rem; margin-bottom: 0.8rem; }
+  .history-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
+  .history-title { font-size: 14px; font-weight: 700; color: #3C3489; }
+  .history-clear { font-size: 12px; color: #ccc; background: none; border: none; cursor: pointer; padding: 2px 6px; }
+  .history-clear:hover { color: #F0997B; }
+  .history-empty { text-align: center; color: #ccc; font-size: 13px; padding: 0.6rem 0 0.8rem; }
+  .history-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 12px; margin-bottom: 5px; cursor: pointer; transition: background 0.12s; background: #faf8ff; }
+  .history-item:hover { background: #ede9fa; }
+  .history-item:active { background: #ddd8f8; }
+  .hi-pct { font-size: 18px; font-weight: 700; min-width: 46px; text-align: center; }
+  .hi-pct.great { color: #3B6D11; }
+  .hi-pct.ok    { color: #BA7517; }
+  .hi-pct.low   { color: #A32D2D; }
+  .hi-info { flex: 1; }
+  .hi-date { font-size: 12px; color: #aaa; }
+  .hi-themes { font-size: 12px; color: #7F77DD; font-weight: 500; margin-top: 1px; }
+  .hi-stats { font-size: 12px; color: #888; white-space: nowrap; }
+  /* History detail modal */
+  .hist-detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 250; align-items: center; justify-content: center; padding: 1rem; }
+  .hist-detail-overlay.open { display: flex; }
+  .hist-detail-modal { background: #fff; border-radius: 24px; max-width: 500px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 1.4rem 1.1rem; position: relative; }
+  .hist-detail-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 20px; cursor: pointer; color: #aaa; }
   @media (max-width: 400px) {
     .word-display { font-size: 34px; }
     .star-token { width: 48px; height: 48px; }
@@ -173,6 +200,22 @@
       <tr><td>lune = 1</td><td>lu·ne = 2</td></tr>
       <tr><td>té·lé·phone = 3</td><td>té·lé·pho·ne = 4</td></tr>
     </table>
+  </div>
+</div>
+
+<!-- HISTORY DETAIL MODAL -->
+<div class="hist-detail-overlay" id="hist-detail-overlay" onclick="closeHistDetail(event)">
+  <div class="hist-detail-modal" id="hist-detail-modal">
+    <button class="hist-detail-close" onclick="document.getElementById('hist-detail-overlay').classList.remove('open')">✕</button>
+    <h2 id="hd-title" style="text-align:center;font-size:18px;font-weight:700;color:#3C3489;margin-bottom:0.3rem"></h2>
+    <div class="results-score" id="hd-pct"></div>
+    <div class="results-subtitle" id="hd-subtitle"></div>
+    <div class="results-stats" style="margin-bottom:1rem">
+      <div class="stat-box good"><div class="stat-num" id="hd-correct"></div><div class="stat-label">✅ Justes</div></div>
+      <div class="stat-box bad"> <div class="stat-num" id="hd-wrong"></div> <div class="stat-label">❌ Faux</div></div>
+    </div>
+    <div class="results-list"><h3>✅ Bien trouvés</h3><div id="hd-list-correct"></div></div>
+    <div class="results-list"><h3>❌ À retravailler</h3><div id="hd-list-wrong"></div></div>
   </div>
 </div>
 
@@ -250,6 +293,15 @@
     <div id="empty-msg" class="empty-msg" style="display:none">Aucun mot trouvé avec ces filtres.</div>
 
     <button class="launch-btn" id="launch-btn" onclick="launchSession()">▶ Lancer la partie</button>
+  </div>
+
+  <!-- HISTORY CARD -->
+  <div class="history-card" id="history-card">
+    <div class="history-header">
+      <span class="history-title">📋 Historique</span>
+      <button class="history-clear" onclick="clearHistory()">Effacer</button>
+    </div>
+    <div id="history-list"><div class="history-empty">Aucune partie jouée</div></div>
   </div>
 
   <!-- GAME AREA -->
@@ -1276,6 +1328,7 @@ function launchSession() {
   tokens = 0;
   answered = false;
   document.getElementById('setup-card').style.display = 'none';
+  document.getElementById('history-card').style.display = 'none';
   document.getElementById('game-area').style.display = 'block';
   renderSession();
 }
@@ -1377,15 +1430,109 @@ function nextWord() {
   renderSession();
 }
 
+// ── HISTORY ───────────────────────────────────────────────────────
+const HISTORY_KEY = 'mots_olivia_history';
+const MAX_HISTORY = 30;
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveHistory(h) {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); } catch(e) {}
+}
+
+function addHistoryEntry(entry) {
+  const h = loadHistory();
+  h.unshift(entry);
+  if (h.length > MAX_HISTORY) h.splice(MAX_HISTORY);
+  saveHistory(h);
+  renderHistory();
+}
+
+function clearHistory() {
+  if (!confirm('Effacer tout l\'historique ?')) return;
+  saveHistory([]);
+  renderHistory();
+}
+
+function renderHistory() {
+  const h = loadHistory();
+  const list = document.getElementById('history-list');
+  if (!h.length) {
+    list.innerHTML = '<div class="history-empty">Aucune partie jouée</div>';
+    return;
+  }
+  list.innerHTML = '';
+  h.forEach((entry, i) => {
+    const pctClass = entry.pct >= 80 ? 'great' : entry.pct >= 50 ? 'ok' : 'low';
+    const d = new Date(entry.ts);
+    const dateStr = d.toLocaleDateString('fr-CH', { day:'2-digit', month:'2-digit', year:'numeric' })
+      + ' ' + d.toLocaleTimeString('fr-CH', { hour:'2-digit', minute:'2-digit' });
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerHTML =
+      '<span class="hi-pct ' + pctClass + '">' + entry.pct + '%</span>' +
+      '<span class="hi-info">' +
+        '<div class="hi-date">' + dateStr + '</div>' +
+        '<div class="hi-themes">' + entry.themes.join(', ') + (entry.sounds && entry.sounds.length ? ' · ' + entry.sounds.join('/') : '') + '</div>' +
+      '</span>' +
+      '<span class="hi-stats">' + entry.nbCorrect + '/' + entry.total + '</span>';
+    item.onclick = () => openHistDetail(i);
+    list.appendChild(item);
+  });
+}
+
+function openHistDetail(i) {
+  const h = loadHistory();
+  const entry = h[i]; if (!entry) return;
+  const d = new Date(entry.ts);
+  const dateStr = d.toLocaleDateString('fr-CH', { weekday:'long', day:'2-digit', month:'long', year:'numeric' })
+    + ' à ' + d.toLocaleTimeString('fr-CH', { hour:'2-digit', minute:'2-digit' });
+  document.getElementById('hd-title').textContent = 'Partie du ' + dateStr;
+  const pctEl = document.getElementById('hd-pct');
+  pctEl.textContent = entry.pct + '%';
+  pctEl.className = 'results-score ' + (entry.pct >= 80 ? 'great' : entry.pct >= 50 ? 'ok' : 'low');
+  document.getElementById('hd-subtitle').textContent =
+    entry.nbCorrect + ' juste' + (entry.nbCorrect > 1 ? 's' : '') + ' sur ' + entry.total +
+    ' — ' + entry.themes.join(', ');
+  document.getElementById('hd-correct').textContent = entry.nbCorrect;
+  document.getElementById('hd-wrong').textContent = entry.total - entry.nbCorrect;
+  const listC = document.getElementById('hd-list-correct');
+  const listW = document.getElementById('hd-list-wrong');
+  listC.innerHTML = ''; listW.innerHTML = '';
+  entry.results.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'result-item ' + (r.correct ? 'correct' : 'wrong');
+    const wordLabel = (r.emoji || '') + ' ' + r.word;
+    div.innerHTML =
+      '<span class="ri-icon">' + (r.correct ? '✅' : '❌') + '</span>' +
+      '<span class="ri-word">' + wordLabel.trim() + '</span>' +
+      '<span class="ri-answer">' +
+        (r.correct ? r.syllables.join(' · ')
+          : 'Donné : ' + r.given + '  •  Attendu : ' + r.expected + ' (' + r.syllables.join(' · ') + ')') +
+      '</span>';
+    (r.correct ? listC : listW).appendChild(div);
+  });
+  if (!listC.children.length) listC.innerHTML = '<div style="color:#aaa;font-size:13px;padding:4px 0">Aucun</div>';
+  if (!listW.children.length) listW.innerHTML = '<div style="color:#aaa;font-size:13px;padding:4px 0">Aucun</div>';
+  document.getElementById('hist-detail-overlay').classList.add('open');
+}
+
+function closeHistDetail(e) {
+  if (e.target === document.getElementById('hist-detail-overlay'))
+    document.getElementById('hist-detail-overlay').classList.remove('open');
+}
+
 // ── RESULTS ───────────────────────────────────────────────────────
 function showResults() {
   const total = sessionResults.length;
   const nbCorrect = sessionResults.filter(r => r.correct).length;
-  const nbWrong = total - nbCorrect;
   const pct = Math.round(nbCorrect / total * 100);
 
   document.getElementById('stat-correct').textContent = nbCorrect;
-  document.getElementById('stat-wrong').textContent = nbWrong;
+  document.getElementById('stat-wrong').textContent = total - nbCorrect;
 
   const pctEl = document.getElementById('results-pct');
   pctEl.textContent = pct + '%';
@@ -1399,15 +1546,11 @@ function showResults() {
   const bucket = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'low';
   const arr = msgs[bucket];
   document.getElementById('results-subtitle').textContent =
-    arr[Math.floor(Math.random() * arr.length)] +
-    ' — ' + nbCorrect + ' juste' + (nbCorrect > 1 ? 's' : '') + ' sur ' + total;
+    arr[Math.floor(Math.random() * arr.length)] + ' — ' + nbCorrect + ' juste' + (nbCorrect > 1 ? 's' : '') + ' sur ' + total;
 
-  // Lists
   const listC = document.getElementById('list-correct');
   const listW = document.getElementById('list-wrong');
-  listC.innerHTML = '';
-  listW.innerHTML = '';
-
+  listC.innerHTML = ''; listW.innerHTML = '';
   sessionResults.forEach(r => {
     const div = document.createElement('div');
     div.className = 'result-item ' + (r.correct ? 'correct' : 'wrong');
@@ -1416,27 +1559,37 @@ function showResults() {
       '<span class="ri-icon">' + (r.correct ? '✅' : '❌') + '</span>' +
       '<span class="ri-word">' + wordLabel.trim() + '</span>' +
       '<span class="ri-answer">' +
-        (r.correct
-          ? r.syllables.join(' · ')
-          : 'Donné : ' + r.given + '  •  Attendu : ' + r.expected + ' (' + r.syllables.join(' · ') + ')'
-        ) +
+        (r.correct ? r.syllables.join(' · ')
+          : 'Donné : ' + r.given + '  •  Attendu : ' + r.expected + ' (' + r.syllables.join(' · ') + ')') +
       '</span>';
     (r.correct ? listC : listW).appendChild(div);
   });
-
   if (!listC.children.length) listC.innerHTML = '<div style="color:#aaa;font-size:13px;padding:4px 0">Aucun</div>';
   if (!listW.children.length) listW.innerHTML = '<div style="color:#aaa;font-size:13px;padding:4px 0">Aucun</div>';
+
+  // Save to history
+  const themeNames = [...activeThemes].map(val => {
+    const el = document.querySelector('[data-type="theme"][data-val="' + val + '"]');
+    return el ? el.textContent.trim() : val;
+  });
+  addHistoryEntry({
+    ts: Date.now(), pct, nbCorrect, total,
+    themes: themeNames,
+    sounds: [...activeSounds],
+    results: sessionResults.map(r => ({
+      word: r.word, emoji: r.emoji, correct: r.correct,
+      given: r.given, expected: r.expected, syllables: r.syllables
+    }))
+  });
 
   document.getElementById('results-overlay').classList.add('open');
   speakText(pct + ' pourcent de réussite. ' + (pct >= 80 ? 'Excellent !' : pct >= 50 ? 'Pas mal !' : 'On continue !'));
 }
 
 function retrySession() {
-  // Replay same words in new random order
   document.getElementById('results-overlay').classList.remove('open');
   sessionPlaylist = [...sessionPlaylist].sort(() => Math.random() - 0.5);
-  sessionIdx = 0;
-  sessionResults = [];
+  sessionIdx = 0; sessionResults = [];
   tokens = 0; answered = false;
   renderSession();
 }
@@ -1445,6 +1598,7 @@ function newSession() {
   document.getElementById('results-overlay').classList.remove('open');
   document.getElementById('game-area').style.display = 'none';
   document.getElementById('setup-card').style.display = 'block';
+  document.getElementById('history-card').style.display = 'block';
   inSession = false;
   updateLaunchBtn();
 }
@@ -1458,11 +1612,10 @@ function confirmQuit() {
   document.getElementById('confirm-overlay').classList.remove('open');
   document.getElementById('game-area').style.display = 'none';
   document.getElementById('setup-card').style.display = 'block';
+  document.getElementById('history-card').style.display = 'block';
   inSession = false;
-  sessionResults = [];
-  sessionIdx = 0;
-  tokens = 0;
-  answered = false;
+  sessionResults = []; sessionIdx = 0;
+  tokens = 0; answered = false;
   updateLaunchBtn();
 }
 
@@ -1496,6 +1649,13 @@ if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefin
 }
 setTimeout(() => { maleVoice = pickMaleVoice(); }, 400);
 updateLaunchBtn();
+renderHistory();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
