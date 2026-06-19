@@ -2,7 +2,7 @@ const CACHE = 'mots-olivia-v1';
 const ASSETS = [
   './index.html',
   './manifest.json',
-  './icon-jeu-mots.png'
+  './icon-o-li-via.png'
 ];
 
 self.addEventListener('install', e => {
